@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= user %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Projects</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
   </head>
   <body>
-    <h1><%= user %></h1>
-    <p>Welcome to <%= user %></p>
+    <div class="container">
+      <h1>Welcome,</h1>
+      <p><%= user.firstname + " " + user.lastname %></p>
+      <a href="/logout">Logout</a>
+    </div>
   </body>
 </html>
