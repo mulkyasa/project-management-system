@@ -23,16 +23,17 @@ module.exports = (db) => {
         req.flash('loginMessage', 'User not found!');
         return res.redirect('/');
       };
-      if(data.rows[0].email == email && data.rows[0].password != password) {
+      if(data.rows[0].email != email && data.rows[0].password != password) {
         req.flash('loginMessage', 'User or password is wrong, please try again!');
+        return res.redirect('/');
       };
       req.session.user = data.rows[0];
-      res.redirect('/projects');
+      res.redirect('/project');
     });
   });
 
-  router.get('/projects', isLoggedIn, (req, res, next) => {
-    res.render('index', { user: req.session.user });
+  router.get('/project', isLoggedIn, (req, res, next) => {
+    res.render('project', { title: 'PMS · Projects', user: req.session.user });
   });
 
   router.get('/logout', (req, res, next) => {
