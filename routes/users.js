@@ -25,12 +25,12 @@ module.exports = (db) => {
     });
   });
 
-  // router.post('/add', helpers.isLoggenIn, (req, res, next) => {
-  //   const {email, password, firstname, lastname} = req.body;
-  //   db.query('INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4)', [email, password, firstname, lastname], (err, data) => {
-  //     if(err) return res.send(err);
-  //     res.redirect('/users');
-  //   });
-  // });
+  router.post('/add', helpers.isLoggedIn, (req, res, next) => {
+    const {email, password, firstname, lastname} = req.body;
+    db.query('INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4)', [email, password, firstname, lastname], (err, data) => {
+      if(err) return res.send(err);
+      res.redirect('/users');
+    });
+  });
   return router;
 };
