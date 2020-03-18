@@ -1,0 +1,188 @@
+<%- include('../partials/_navbar.ejs') %>
+
+<!-- Page content -->
+<main role="main" class="flex-shrink-0">
+  <div class="container">
+    <h1 class="display-4 mb-4">Users</h1>
+    <div class="shadow-sm card">
+      <div class="card-body">
+        <form action="">
+          <h3 class="h3 mb-3">Filters</h3>
+          <hr>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-id" class="col-form-label">
+                <input type="checkbox" id="filter-id" name="filter-id"/> ID
+              </label>
+            </div>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                name="filter-id"
+                placeholder="ID"
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-name" class="col-form-label">
+                <input type="checkbox" id="filter-name" name="filter-name"/> Name
+              </label>
+            </div>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                name="filter-name"
+                placeholder="Name"
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-email" class="col-form-label">
+                <input type="checkbox" id="filter-email" name="filter-email"/> Email
+              </label>
+            </div>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                name="filter-email"
+                placeholder="Email"
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-position" class="col-form-label">
+                <input type="checkbox" id="filter-position" name="filter-position"/> Position
+              </label>
+            </div>
+            <div class="col-sm-10">
+              <select class="custom-select">
+                <option selected>Choose position</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+          </div>
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0">
+                <input type="checkbox" name="checkTypeJob"> Type Job
+              </legend>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="gridRadios1" name="inputTypeJob" value="Full Time"
+                    checked>
+                  <label class="form-check-label" for="gridRadios1">
+                    Full Time
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="gridRadios2" name="inputTypeJob" value="Part Time">
+                  <label class="form-check-label" for="gridRadios2">
+                    Part Time
+                  </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <button type="button" class="btn btn-sm btn-dark" type="submit">Search</button>
+          <button type="button" class="btn btn-sm btn-default" type="submit">Reset</button>
+        </form>
+      </div>
+    </div>
+    <div class="shadow-sm card mt-3">
+      <div class="card-body">
+        <h3 class="h3 mb-3">Option</h3>
+        <hr>
+        <div class="form-group row">
+          <div class="col-sm-2">Columns</div>
+          <div class="col-sm-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="check-id" name="check-id" value="true">
+              <label class="form-check-label" for="check-id">
+                ID
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="check-name" name="check-name" value="true">
+              <label class="form-check-label" for="check-name">
+                Name
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="check-member" name="check-member" value="true">
+              <label class="form-check-label" for="check-member">
+                Member
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-sm btn-dark" type="submit">Apply</button>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-sm">
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col-sm">ID</th>
+                  <th scope="col-sm">Email</th>
+                  <th scope="col-sm">Name</th>
+                  <th scope="col-sm">Position</th>
+                  <th scope="col-sm">Type Job</th>
+                  <th scope="col-sm">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>markjacob@gmail.com</td>
+                  <td>Mark Jacob</td>
+                  <td>Manager</td>
+                  <td>Full time</td>
+                  <td>
+                    <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
+                    <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>pappyjhonny@gmail.com</td>
+                  <td>Pappy Jhonny</td>
+                  <td>Software developer</td>
+                  <td>Part time</td>
+                  <td>
+                    <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
+                    <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
+          </ul>
+        </nav>
+        <button type="button" class="btn btn-sm btn-dark" type="submit">Add data</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/_footer.ejs') %>

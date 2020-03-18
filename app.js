@@ -14,9 +14,11 @@ const pool = new Pool({
   password: '010203',
   port: 5432
 })
+console.log('Database connected successfully!')
 
 var indexRouter = require('./routes/index')(pool);
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/users')(pool);
+var profileRouter = require('./routes/profile')(pool);
 
 var app = express();
 
@@ -30,7 +32,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'kukulilineran'
+  secret: 'kukulilineran',
+  resave: true,
+  saveUninitialized: true
 }));
 app.use(flash());
 
@@ -41,6 +45,7 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/profile', profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

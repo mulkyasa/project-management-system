@@ -12,7 +12,7 @@ function isLoggedIn(req, res, next) {
 /* GET home page. */
 module.exports = (db) => {
   router.get("/", function(req, res, next) {
-    res.render('login', {loginMessage: req.flash('loginMessage')});
+    res.render('login', { loginMessage: req.flash('loginMessage'), title: 'Sign in' });
   });
 
   router.post("/login", function(req, res, next) {
@@ -33,7 +33,7 @@ module.exports = (db) => {
   });
 
   router.get('/project', isLoggedIn, (req, res, next) => {
-    res.render('project', { title: 'PMS · Projects', user: req.session.user });
+    res.render('project/list', { title: 'Projects', user: req.session.user });
   });
 
   router.get('/logout', (req, res, next) => {
@@ -41,6 +41,5 @@ module.exports = (db) => {
       res.redirect('/');
     })
   });
-
   return router;
 };
