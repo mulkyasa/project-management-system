@@ -72,19 +72,19 @@
           <fieldset class="form-group">
             <div class="row">
               <legend class="col-form-label col-sm-2 pt-0">
-                <input type="checkbox" name="checkTypeJob"> Type Job
+                <input type="checkbox" name="filter-type-job"> Type Job
               </legend>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="gridRadios1" name="inputTypeJob" value="Full Time"
+                  <input class="form-check-input" type="radio" id="part-time" name="filter-type-job" value="Full Time"
                     checked>
-                  <label class="form-check-label" for="gridRadios1">
+                  <label class="form-check-label" for="part-time">
                     Full Time
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="gridRadios2" name="inputTypeJob" value="Part Time">
-                  <label class="form-check-label" for="gridRadios2">
+                  <input class="form-check-input" type="radio" id="part-time" name="filter-type-job" value="Part Time">
+                  <label class="form-check-label" for="part-time">
                     Part Time
                   </label>
                 </div>
@@ -138,34 +138,23 @@
                   <th scope="col-sm">ID</th>
                   <th scope="col-sm">Email</th>
                   <th scope="col-sm">Name</th>
-                  <th scope="col-sm">Position</th>
-                  <th scope="col-sm">Type Job</th>
                   <th scope="col-sm">Action</th>
+                  <!-- <th scope="col-sm">Type Job</th>
+                  <th scope="col-sm">Action</th> -->
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>markjacob@gmail.com</td>
-                  <td>Mark Jacob</td>
-                  <td>Manager</td>
-                  <td>Full time</td>
-                  <td>
-                    <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
-                    <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>pappyjhonny@gmail.com</td>
-                  <td>Pappy Jhonny</td>
-                  <td>Software developer</td>
-                  <td>Part time</td>
-                  <td>
-                    <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
-                    <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
-                  </td>
-                </tr>
+                <% data.forEach((item) => { %>
+                  <tr>
+                    <th scope="row"><%= item.id %></th>
+                    <td><%= item.email %></td>
+                    <td><%= item.firstname %></td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
+                      <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>

@@ -1,5 +1,13 @@
 var express = require("express");
 var router = express.Router();
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt')
+const saltRounds = 10;
+
+router.use(bodyParser.urlencoded({
+  extended: false
+}));
+router.use(bodyParser.json());
 
 function isLoggedIn(req, res, next) {
   if(req.session.user) {
