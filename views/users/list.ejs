@@ -69,11 +69,11 @@
               </select>
             </div>
           </div>
-          <fieldset class="form-group">
+          <div class="form-group">
             <div class="row">
-              <legend class="col-form-label col-sm-2 pt-0">
+              <label for="filter-type-job" class="col-form-label col-sm-2 pt-0">
                 <input type="checkbox" name="filter-type-job"> Type Job
-              </legend>
+              </label >
               <div class="col-sm-10">
                 <div class="form-check">
                   <input class="form-check-input" type="radio" id="part-time" name="filter-type-job" value="Full Time"
@@ -90,7 +90,7 @@
                 </div>
               </div>
             </div>
-          </fieldset>
+          </div>
           <button type="button" class="btn btn-sm btn-dark" type="submit">Search</button>
           <button type="button" class="btn btn-sm btn-default" type="submit">Reset</button>
         </form>
@@ -146,7 +146,7 @@
               <tbody>
                 <% data.forEach((item) => { %>
                   <tr>
-                    <th scope="row"><%= item.id %></th>
+                    <th scope="row"><%= item.userid %></th>
                     <td><%= item.email %></td>
                     <td><%= item.firstname %></td>
                     <td>
@@ -168,7 +168,9 @@
             <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
           </ul>
         </nav>
-        <button type="button" class="btn btn-sm btn-dark" type="submit">Add data</button>
+        <a href="/users/add">
+          <button class="btn btn-sm btn-dark" type="submit">Add data</button>
+        </a>
       </div>
     </div>
   </div>
