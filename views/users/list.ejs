@@ -57,33 +57,33 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="position" class="col-form-label">
-                <input type="checkbox" id="position" name="check-position"/> Position
+                <input type="checkbox" id="position" name="checkPosition"/> Position
               </label>
             </div>
             <div class="col-sm-10">
-              <select class="custom-select">
-                <option selected>Choose position</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+              <select class="custom-select" name="inputPosition">
+                <option>Choose position</option>
+                <option value="Manager">Manager</option>
+                <option value="Quality Assurance">Quality Assurance</option>
+                <option value="Software Developer">Software Developer</option>
               </select>
             </div>
           </div>
           <div class="form-group">
             <div class="row">
               <label for="filter-type-job" class="col-form-label col-sm-2 pt-0">
-                <input type="checkbox" name="filter-type-job"> Type Job
+                <input type="checkbox" name="checkTypeJob"> Type Job
               </label >
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="part-time" name="filter-type-job" value="Full Time"
+                  <input class="form-check-input" type="radio" id="full-time" name="inputTypeJob" value="Full Time"
                     checked>
-                  <label class="form-check-label" for="part-time">
+                  <label class="form-check-label" for="full-time">
                     Full Time
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="part-time" name="filter-type-job" value="Part Time">
+                  <input class="form-check-input" type="radio" id="part-time" name="inputTypeJob" value="Part Time">
                   <label class="form-check-label" for="part-time">
                     Part Time
                   </label>
