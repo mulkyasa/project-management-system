@@ -7,36 +7,52 @@ const helpers = require("../helpers/util");
 module.exports = db => {
   /* GET users listing. */
   router.get("/", helpers.isLoggedIn, (req, res, next) => {
+    let sql = `SELECT userid, email, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
+    console.log(sql);
+    // filter users
     let result = [];
     let filterData = false;
-    let sql = `SELECT * FROM users`;
-    const { checkId, inputId, checkName, inputName, checkEmail, inputEmail } = req.query;
+    const {
+      checkId,
+      inputId,
+      checkName,
+      inputName,
+      checkEmail,
+      inputEmail
+    } = req.query;
 
     if (checkId && inputId) {
       result.push(`userid = ${inputId}`);
       filterData = true;
-    };
+    }
     if (checkName && inputName) {
       result.push(`firstname = '${inputName}'`);
       filterData = true;
-    };
+    }
     if (checkEmail && inputEmail) {
       result.push(`email = '${inputEmail}'`);
       filterData = true;
-    };
-
+    }
     if (filterData) {
       sql += ` WHERE ${result.join(" AND ")}`;
     }
-    console.log(sql);
-    console.log(result);
+
+    sql += ` ORDER BY userid`;
+
     db.query(sql, (err, data) => {
+      const page = req.query.page || 1;
+      
+
       if (err) res.status(500).json(err);
-      res.render("users/list", {
-        title: "Users",
-        user: req.session.user,
-        query: req.query,
-        data: data.rows
+
+      db.query(sql, (err, data) => {
+        if (err) res.status(500).json(err);
+        res.render("users/list", {
+          title: "Users",
+          user: req.session.user,
+          query: req.query,
+          data: data.rows
+        });
       });
     });
   });
@@ -48,11 +64,10 @@ module.exports = db => {
   });
 
   router.post("/add", helpers.isLoggedIn, (req, res, next) => {
-    const { email, password, firstname, lastname } = req.body;
-    db.query(
-      "INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4)",
-      [email, password, firstname, lastname],
-      (err, data) => {
+    const { email, password, firstname, lastname, position, typejob } = req.body;
+    const job = typejob == "Full Time" ? true : false;
+    const sql = `INSERT INTO users (email, password, firstname, lastname, position, typejob) VALUES ('${email}', '${password}', '${firstname}', '${lastname}', '${position}', ${job})`;
+    db.query(sql, (err, data) => {
         if (err) res.status(500).json(err);
         res.redirect("/users");
       }

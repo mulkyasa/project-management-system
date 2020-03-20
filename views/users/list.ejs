@@ -140,6 +140,8 @@
                   <th scope="col-sm">ID</th>
                   <th scope="col-sm">Email</th>
                   <th scope="col-sm">Name</th>
+                  <th scope="col-sm">Position</th>
+                  <th scope="col-sm">Type Job</th>
                   <th scope="col-sm">Action</th>
                 </tr>
               </thead>
@@ -148,7 +150,9 @@
                   <tr>
                     <th scope="row"><%= item.userid %></th>
                     <td><%= item.email %></td>
-                    <td><%= item.firstname %></td>
+                    <td><%= item.name %></td>
+                    <td><%= item.position %></td>
+                    <td><%= item.typejob == true ? 'Full Time' : 'Part Time' %></td>
                     <td>
                       <a href="/users/edit/<%= item.userid %>">
                         <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
@@ -163,7 +167,7 @@
             </table>
           </div>
         </div>
-        <nav aria-label="Page navigation">
+        <nav aria-label="Page navigation mt-2">
           <ul class="pagination justify-content-center">
             <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
             <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
