@@ -12,7 +12,6 @@ module.exports = db => {
     let sql = `SELECT userid, email, password, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
     // filter users
     let result = [];
-    let filterData = false;
     const {
       checkId,
       inputId,

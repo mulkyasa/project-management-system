@@ -7,13 +7,13 @@
     <div class="shadow-sm card">
       <div class="card-body">
         <form method="GET">
-          <input type="hidden" id="page" name="page" value="1">
+          <input type="hidden" id="page" name="page" value="1" />
           <h3 class="h3 mb-3">Filters</h3>
-          <hr>
+          <hr />
           <div class="form-group row">
             <div class="col-sm">
               <label for="id" class="col-form-label">
-                <input type="checkbox" id="id" name="checkId"/> ID
+                <input type="checkbox" id="id" name="checkId" /> ID
               </label>
             </div>
             <div class="col-sm-10">
@@ -28,7 +28,7 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="name" class="col-form-label">
-                <input type="checkbox" id="name" name="checkName"/> Name
+                <input type="checkbox" id="name" name="checkName" /> Name
               </label>
             </div>
             <div class="col-sm-10">
@@ -43,7 +43,7 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="email" class="col-form-label">
-                <input type="checkbox" id="email" name="checkEmail"/> Email
+                <input type="checkbox" id="email" name="checkEmail" /> Email
               </label>
             </div>
             <div class="col-sm-10">
@@ -58,7 +58,8 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="position" class="col-form-label">
-                <input type="checkbox" id="position" name="checkPosition"/> Position
+                <input type="checkbox" id="position" name="checkPosition" />
+                Position
               </label>
             </div>
             <div class="col-sm-10">
@@ -73,18 +74,35 @@
           <div class="form-group">
             <div class="row">
               <label for="filter-type-job" class="col-form-label col-sm-2 pt-0">
-                <input type="checkbox" id="filter-type-job" name="checkTypeJob"> Type Job
-              </label >
+                <input
+                  type="checkbox"
+                  id="filter-type-job"
+                  name="checkTypeJob"
+                />
+                Type Job
+              </label>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="full-time" name="inputTypeJob" value="Full Time"
-                    checked>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="full-time"
+                    name="inputTypeJob"
+                    value="Full Time"
+                    checked
+                  />
                   <label class="form-check-label" for="full-time">
                     Full Time
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="part-time" name="inputTypeJob" value="Part Time">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="part-time"
+                    name="inputTypeJob"
+                    value="Part Time"
+                  />
                   <label class="form-check-label" for="part-time">
                     Part Time
                   </label>
@@ -102,12 +120,18 @@
     <div class="shadow-sm card mt-3">
       <div class="card-body">
         <h3 class="h3 mb-3">Option</h3>
-        <hr>
+        <hr />
         <div class="form-group row">
           <div class="col-sm-2">Columns</div>
           <div class="col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check-id" name="check-id" value="true">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-id"
+                name="check-id"
+                value="true"
+              />
               <label class="form-check-label" for="check-id">
                 ID
               </label>
@@ -115,7 +139,13 @@
           </div>
           <div class="col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check-name" name="check-name" value="true">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-name"
+                name="check-name"
+                value="true"
+              />
               <label class="form-check-label" for="check-name">
                 Name
               </label>
@@ -123,14 +153,22 @@
           </div>
           <div class="col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check-member" name="check-member" value="true">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-member"
+                name="check-member"
+                value="true"
+              />
               <label class="form-check-label" for="check-member">
                 Member
               </label>
             </div>
           </div>
           <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-dark" type="submit">Apply</button>
+            <button type="button" class="btn btn-sm btn-dark" type="submit">
+              Apply
+            </button>
           </div>
         </div>
         <div class="row mt-4">
@@ -148,21 +186,35 @@
               </thead>
               <tbody>
                 <% data.forEach((item) => { %>
-                  <tr>
-                    <th scope="row"><%= item.userid %></th>
-                    <td><%= item.email %></td>
-                    <td><%= item.name %></td>
-                    <td><%= item.position %></td>
-                    <td><%= item.typejob == true ? 'Full Time' : 'Part Time' %></td>
-                    <td>
-                      <a href="/users/edit/<%= item.userid %>">
-                        <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
-                      </a>
-                      <a href="/users/delete/<%= item.userid %>">
-                        <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
-                      </a>
-                    </td>
-                  </tr>
+                <tr>
+                  <th scope="row"><%= item.userid %></th>
+                  <td><%= item.email %></td>
+                  <td><%= item.name %></td>
+                  <td><%= item.position %></td>
+                  <td>
+                    <%= item.typejob == true ? 'Full Time' : 'Part Time' %>
+                  </td>
+                  <td>
+                    <a href="/users/edit/<%= item.userid %>">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        type="submit"
+                      >
+                        Edit
+                      </button>
+                    </a>
+                    <a href="/users/delete/<%= item.userid %>">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        type="submit"
+                      >
+                        Delete
+                      </button>
+                    </a>
+                  </td>
+                </tr>
                 <% }); %>
               </tbody>
             </table>
@@ -171,15 +223,27 @@
         <nav aria-label="Page navigation mt-2">
           <ul class="pagination justify-content-center">
             <li class="page-item<%= page == 1 ? ' disabled' : '' %>">
-              <a class="page-link" href="<%= url.replace(`page=${page}`, `page=${parseInt(page) - 1}`) %>">Previous</a>
+              <a
+                class="page-link"
+                href="/users<%= url.replace(`page=${page}`, `page=${parseInt(page) - 1}`) %>"
+                >Previous</a
+              >
             </li>
             <% for(let i = 1; i <= pages; i++) { %>
-              <li class="page-item<%= i == page ? ' active' : '' %>">
-                <a class="page-link" href="<%= url.replace(`page=${page}`, `page=${i}`) %>"><%= i %></a>
-              </li>
+            <li class="page-item<%= i == page ? ' active' : '' %>">
+              <a
+                class="page-link"
+                href="/users<%= url.replace(`page=${page}`, `page=${i}`) %>"
+                ><%= i %></a
+              >
+            </li>
             <% }; %>
             <li class="page-item<%= page == pages ? ' disabled' : '' %>">
-              <a class="page-link" href="<%= url.replace(`page=${page}`, `page=${parseInt(page) + 1}`) %>">Next</a>
+              <a
+                class="page-link"
+                href="<%= url.replace(`page=${page}`, `page=${parseInt(page) + 1}`) %>"
+                >Next</a
+              >
             </li>
           </ul>
         </nav>
