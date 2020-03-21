@@ -6,9 +6,10 @@ const helpers = require("../helpers/util");
 
 module.exports = db => {
   /* GET users listing. */
-  router.get("/", helpers.isLoggedIn, (req, res, next) => {
+  router.get("/", helpers.isLoggedIn, (req, res) => {
     const url = req.url == '/' ? '/?page=1' : req.url;
-    let sql = `SELECT userid, email, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
+    console.log(url);
+    let sql = `SELECT userid, email, password, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
     // filter users
     let result = [];
     let filterData = false;
@@ -61,15 +62,14 @@ module.exports = db => {
 
       const pages = Math.ceil(data.rows.length / limit);
 
-      sql += ' limit $1 offset $2';
+      sql += ` LIMIT ${limit} OFFSET ${offset}`;
       console.log(sql);
-      db.query(sql, [limit, offset], (err, data) => {
+      db.query(sql, (err, data) => {
         if (err) res.status(500).json(err);
         res.render("users/list", {
           user: req.session.user,
           data: data.rows,
           title: "Users",
-          url,
           pages,
           page,
           url,
@@ -79,13 +79,13 @@ module.exports = db => {
     });
   });
 
-  router.get("/add", helpers.isLoggedIn, (req, res, next) => {
+  router.get("/add", helpers.isLoggedIn, (req, res) => {
     res.render("users/add", {
       title: "Add User"
     });
   });
 
-  router.post("/add", helpers.isLoggedIn, (req, res, next) => {
+  router.post("/add", helpers.isLoggedIn, (req, res) => {
     const { email, password, firstname, lastname, position, typejob } = req.body;
     const isTypeJob = typejob == "Full Time" ? true : false;
     db.query(`INSERT INTO users (email, password, firstname, lastname, position, typejob) VALUES ($1, $2, $3, $4, $5, $6)`, [email, password, firstname, lastname, position, isTypeJob], (err, data) => {
@@ -95,7 +95,7 @@ module.exports = db => {
     );
   });
 
-  router.get("/edit/:userid", helpers.isLoggedIn, (req, res, next) => {
+  router.get("/edit/:userid", helpers.isLoggedIn, (req, res) => {
     const { userid } = req.params;
     db.query(`SELECT * FROM users WHERE userid = $1`, [userid], (err, data) => {
       if (err) res.status(500).json(err);
@@ -107,7 +107,7 @@ module.exports = db => {
     });
   });
 
-  router.post("/edit/:userid", helpers.isLoggedIn, (req, res, next) => {
+  router.post("/edit/:userid", helpers.isLoggedIn, (req, res) => {
     const { firstname, lastname, email, password, position, typejob } = req.body;
     const isTypeJob = typejob == 'Full Time' ? true : false;
     const { userid } = req.params;
@@ -123,7 +123,7 @@ module.exports = db => {
     });
   });
 
-  router.get("/delete/:userid", helpers.isLoggedIn, (req, res, next) => {
+  router.get("/delete/:userid", helpers.isLoggedIn, (req, res) => {
     const { userid } = req.params;
     db.query(`DELETE FROM users WHERE userid = $1`, [userid], (err, data) => {
       if (err) res.status(500).json(err);
