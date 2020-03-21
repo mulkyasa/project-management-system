@@ -7,6 +7,7 @@ const helpers = require("../helpers/util");
 module.exports = db => {
   /* GET users listing. */
   router.get("/", helpers.isLoggedIn, (req, res, next) => {
+    const url = req.url == '/' ? '/?page=1' : req.url;
     let sql = `SELECT userid, email, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
     // filter users
     let result = [];
@@ -44,25 +45,35 @@ module.exports = db => {
       result.push(`typejob = ${inputTypeJob == 'Full Time' ? true : false}`);
       filterData = true;
     }
-    if (filterData) {
+
+    if (result.length > 0) {
       sql += ` WHERE ${result.join(" AND ")}`;
     }
 
-
     sql += ` ORDER BY userid`;
 
+    const page = req.query.page || 1;
+    const limit = 3;
+    const offset = (page -1) * limit;
+
     db.query(sql, (err, data) => {
-      const page = req.query.page || 1;
+      if(err) res.status(500).json(err);
 
-      if (err) res.status(500).json(err);
+      const pages = Math.ceil(data.rows.length / limit);
 
-      db.query(sql, (err, data) => {
+      sql += ' limit $1 offset $2';
+      console.log(sql);
+      db.query(sql, [limit, offset], (err, data) => {
         if (err) res.status(500).json(err);
         res.render("users/list", {
-          title: "Users",
           user: req.session.user,
-          query: req.query,
-          data: data.rows
+          data: data.rows,
+          title: "Users",
+          url,
+          pages,
+          page,
+          url,
+          query: req.query
         });
       });
     });

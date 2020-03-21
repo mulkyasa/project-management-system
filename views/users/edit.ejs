@@ -73,7 +73,7 @@
               </label>
             </div>
             <div class="col-sm-10">
-              <select class="custom-select" name="position"> 
+              <select class="custom-select" id="position" name="position"> 
                 <option>Choose position</option>
                 <option value="Manager" <%= data.position == 'Manager' ? 'selected' : '' %>>Manager</option>
                 <option value="Quality Assurance" <%= data.position == 'Quality Assurance' ? 'selected' : '' %>>Quality Assurance</option>
@@ -88,13 +88,13 @@
               </label >
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="part-time" name="typejob" value="Full Time" <%= data.typejob == true ? 'checked' : '' %>>
-                  <label class="form-check-label" for="part-time">
+                  <input class="form-check-input" id="full-time" type="radio" id="part-time" name="typejob" value="Full Time" <%= data.typejob == true ? 'checked' : '' %>>
+                  <label class="form-check-label" for="full-time">
                     Full Time
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="part-time" name="typejob" value="Part Time" <%= data.typejob == false ? 'checked' : '' %>>
+                  <input class="form-check-input" id="part-time" type="radio" id="part-time" name="typejob" value="Part Time" <%= data.typejob == false ? 'checked' : '' %>>
                   <label class="form-check-label" for="part-time">
                     Part Time
                   </label>

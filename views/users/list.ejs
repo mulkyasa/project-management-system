@@ -72,7 +72,7 @@
           <div class="form-group">
             <div class="row">
               <label for="filter-type-job" class="col-form-label col-sm-2 pt-0">
-                <input type="checkbox" name="checkTypeJob"> Type Job
+                <input type="checkbox" id="filter-type-job" name="checkTypeJob"> Type Job
               </label >
               <div class="col-sm-10">
                 <div class="form-check">
@@ -169,11 +169,17 @@
         </div>
         <nav aria-label="Page navigation mt-2">
           <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
+            <li class="page-item<%= page == 1 ? ' disabled' : '' %>">
+              <a class="page-link" href="<%= url.replace(`page=${page}`, `page=${parseInt(page) - 1}`) %>">Previous</a>
+            </li>
+            <% for(let i = 1; i <= pages; i++) { %>
+              <li class="page-item<%= i == page ? ' active' : '' %>">
+                <a class="page-link" href="<%= url.replace(`page=${page}`, `page=${i}`) %>"><%= i %></a>
+              </li>
+            <% }; %>
+            <li class="page-item<%= page == pages ? ' disabled' : '' %>">
+              <a class="page-link" href="<%= url.replace(`page=${page}`, `page=${parseInt(page) + 1}`) %>">Next</a>
+            </li>
           </ul>
         </nav>
         <a href="/users/add">

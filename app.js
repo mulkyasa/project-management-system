@@ -13,8 +13,7 @@ const pool = new Pool({
   database: 'pmsdb',
   password: '010203',
   port: 5432
-})
-console.log('Database connected successfully!')
+});
 
 var indexRouter = require('./routes/index')(pool);
 var usersRouter = require('./routes/users')(pool);
