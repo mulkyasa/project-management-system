@@ -1,0 +1,72 @@
+<%- include('../partials/_navbar.ejs') %>
+
+<main role="main" class="flex-shrink-0">
+  <div class="container">
+    <h1 class="display-4 mb-4"><%= title %></h1>
+    <div class="shadow-sm card">
+      <div class="card-body">
+        <form action="/" method="POST">
+          <h3 class="h3 mb-3">Filters</h3>
+          <hr />
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-name" class="col-form-label">Name</label>
+            </div>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                name="filter-name"
+                placeholder="Project Name"
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-2">Members</div>
+            <div class="col-sm">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id=""
+                  name=""
+                  value=""
+                />
+                <label class="form-check-label" for="">
+                  Yasa Mulky Al Afgani
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id=""
+                  name=""
+                  value=""
+                />
+                <label class="form-check-label" for="">
+                  Romi Agung
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id=""
+                  name=""
+                  value=""
+                />
+                <label class="form-check-label" for="">
+                  Eko Prasetyo
+                </label>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-dark" type="submit">Add data</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/_footer.ejs') %>

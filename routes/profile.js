@@ -12,7 +12,8 @@ module.exports = db => {
       if (err) res.status(500).json(err);
       res.render("profile/list", {
         title: "Profile",
-        data: data.rows[0]
+        data: data.rows[0],
+        url: 'profile'
       });
     });
   });

@@ -4,7 +4,7 @@
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a
       class="navbar-brand"
-      href="/project"
+      href="/projects"
       >PMS</a
     >
     <button
@@ -20,21 +20,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
+        <li class="nav-item <%= url == 'projects' ? 'active' : '' %>">
           <a
             class="nav-link"
-            href="/project"
+            href="/projects"
             >Projects <span class="sr-only">(current)</span></a
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item <%= url == 'profile' ? 'active' : '' %>">
           <a
             class="nav-link"
             href="/profile"
             >Profile</a
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item <%= url == 'users' ? 'active' : '' %>">
           <a
             class="nav-link"
             href="/users"

@@ -7,7 +7,7 @@ const saltRounds = 10;
 module.exports = db => {
   /* GET users listing. */
   router.get("/", helpers.isLoggedIn, (req, res) => {
-    const url = req.url == "/" ? "/?page=1" : req.url;
+    const link = req.url == "/" ? "/?page=1" : req.url;
     let sql = `SELECT userid, email, password, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
     // filter users
     let result = [];
@@ -69,7 +69,8 @@ module.exports = db => {
           title: "Users",
           pages,
           page,
-          url,
+          link,
+          url: 'users',
           query: req.query
         });
       });
@@ -78,7 +79,8 @@ module.exports = db => {
 
   router.get("/add", helpers.isLoggedIn, (req, res) => {
     res.render("users/add", {
-      title: "Add User"
+      title: "Add User",
+      url: 'users'
     });
   });
 
@@ -112,7 +114,8 @@ module.exports = db => {
       res.render("users/edit", {
         title: "Edit Users",
         query: req.query,
-        data: data.rows[0]
+        data: data.rows[0],
+        url: 'users',
       });
     });
   });

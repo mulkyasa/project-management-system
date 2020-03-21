@@ -42,14 +42,10 @@ module.exports = db => {
             return res.redirect("/");
           };
           req.session.user = data.rows[0];
-          res.redirect("/project");
+          res.redirect("/projects");
         });
       }
     );
-  });
-
-  router.get("/project", helpers.isLoggedIn, (req, res, next) => {
-    res.render("project/list", { title: "Projects", user: req.session.user });
   });
 
   router.get("/logout", (req, res, next) => {
