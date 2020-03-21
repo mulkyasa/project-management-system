@@ -8,7 +8,6 @@ module.exports = db => {
   /* GET users listing. */
   router.get("/", helpers.isLoggedIn, (req, res) => {
     const url = req.url == '/' ? '/?page=1' : req.url;
-    console.log(url);
     let sql = `SELECT userid, email, password, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
     // filter users
     let result = [];
@@ -62,7 +61,6 @@ module.exports = db => {
       const pages = Math.ceil(data.rows.length / limit);
 
       sql += ` LIMIT ${limit} OFFSET ${offset}`;
-      console.log(sql);
       db.query(sql, (err, data) => {
         if (err) res.status(500).json(err);
         res.render("users/list", {
