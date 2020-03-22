@@ -134,11 +134,11 @@ module.exports = db => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) res.status(500).json(err);
       if (!password) {
-        sql = `UPDATE users SET firstname = '${firstname}', lastname = '${lastname}', email = '${email}', position = '${position}', typejob = ${isTypeJob} WHERE userid = ${userid}`;
+        sql = `UPDATE users SET firstname = $2, lastname = $3, email = $4, position = $5, typejob = $6 WHERE userid = $1`;
       } else {
-        sql = `UPDATE users SET firstname = '${firstname}', lastname = '${lastname}', email = '${email}', password = '${hash}', position = '${position}', typejob = ${isTypeJob} WHERE userid=${userid}`;
+        sql = `UPDATE users SET firstname = $2, lastname = $3, email = $4, password = $7, position = $5, typejob = $6 WHERE userid=$1`;
       };
-      db.query(sql, (err, data) => {
+      db.query(sql, [userid, firstname, lastname, email, position, isTypeJob, hash], (err, data) => {
         if (err) res.status(500).json(err);
         res.redirect("/users");
       });

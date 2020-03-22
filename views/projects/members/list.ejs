@@ -1,8 +1,25 @@
-<%- include('../partials/_navbar.ejs') %>
-<!-- Page content -->
-<main role="main" class="flex-shrink-0">
-  <div class="container">
-    <h1 class="display-4 mb-4"><%= title %></h1>
+<%- include('../../partials/_sidebar.ejs') %>
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+  <div class="container-fluid">
+    <div
+      class="chartjs-size-monitor-expand"
+      style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+    >
+      <div
+        style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"
+      ></div>
+    </div>
+    <div
+      class="chartjs-size-monitor-shrink"
+      style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+    >
+      <div
+        style="position:absolute;width:200%;height:200%;left:0; top:0"
+      ></div>
+    </div>
+    <h1 class="display-4 mb-1"><%= title %></h1>
+    <p class="h5 mb-4 text-secondary">#1 Web Project - Company Profile</p>
     <div class="shadow-sm card">
       <div class="card-body">
         <form action="">
@@ -40,16 +57,16 @@
           </div>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="filter-member" class="col-form-label">
-                <input type="checkbox" id="filter-member" name="filter-member"/> Member
+              <label for="filter-position" class="col-form-label">
+                <input type="checkbox" id="filter-position" name="filter-position"/> Position
               </label>
             </div>
             <div class="col-sm-10">
               <select class="custom-select">
-                <option selected>Choose member</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option selected>Choose position</option>
+                <option value="Manager">Manager</option>
+                <option value="Quality Assurance">Quality Assurance</option>
+                <option value="Software Developer">Software Developer</option>
               </select>
             </div>
           </div>
@@ -82,9 +99,9 @@
           </div>
           <div class="col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check-member" name="check-member" value="true">
-              <label class="form-check-label" for="check-member">
-                Member
+              <input class="form-check-input" type="checkbox" id="check-position" name="check-position" value="true">
+              <label class="form-check-label" for="check-position">
+                Position
               </label>
             </div>
           </div>
@@ -99,23 +116,17 @@
                 <tr>
                   <th scope="col-sm">ID</th>
                   <th scope="col-sm">Name</th>
-                  <th scope="col-sm">Member</th>
+                  <th scope="col-sm">Position</th>
                   <th scope="col-sm">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">
-                    <a href="/projects/overview" class="text-dark">
-                      <button type="button" class="btn btn-sm btn-light">
-                        1
-                      </button>
-                    </a>
-                  </th>
-                  <td>Web App Project - Company Name</td>
-                  <td>Yasa Mulky Al Afgani, Eko Prasetyo, Romi Agung</td>
+                  <th scope="row">1</th>
+                  <td>Eko Prasetyo</td>
+                  <td>Manager</td>
                   <td>
-                    <a href="/projects/edit">
+                    <a href="#">
                       <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
                     </a>
                     <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
@@ -141,4 +152,4 @@
     </div>
   </div>
 </main>
-<%- include('../partials/_footer.ejs') %>
+<%- include('../../partials/_footer.ejs') %>

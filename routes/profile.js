@@ -31,11 +31,11 @@ module.exports = db => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) res.status(500).json(err);
       if (!password) {
-        sql = `UPDATE users SET firstname = '${firstname}', lastname = '${lastname}', position = '${position}', typejob = ${isTypeJob} WHERE email = '${user.email}'`;
+        sql = `UPDATE users SET firstname = $1, lastname = $2, position = $3, typejob = $4 WHERE email = $5`;
       } else {
-        sql = `UPDATE users SET firstname = '${firstname}', lastname = '${lastname}', password = '${hash}', position = '${position}', typejob = ${isTypeJob} WHERE email='${user.email}'`;
+        sql = `UPDATE users SET firstname = $1, lastname = $2, password = $6, position = $3, typejob = $4 WHERE email = $5`;
       };
-      db.query(sql, (err, data) => {
+      db.query(sql, [firstname, lastname, position, isTypeJob, user.email, hash], (err, data) => {
         if (err) res.status(500).json(err);
         res.redirect("/profile");
       });

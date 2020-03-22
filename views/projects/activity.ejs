@@ -1,0 +1,82 @@
+<%- include('../partials/_sidebar.ejs') %>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div class="container-fluid">
+        <div
+          class="chartjs-size-monitor-expand"
+          style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+        >
+          <div
+            style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"
+          ></div>
+        </div>
+        <div
+          class="chartjs-size-monitor-shrink"
+          style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+        >
+          <div
+            style="position:absolute;width:200%;height:200%;left:0; top:0"
+          ></div>
+        </div>
+        <h1 class="display-4 mb-1"><%= title %></h1>
+        <p class="h5 mb-4 text-secondary">#1 Web Project - Company Profile</p>
+        <form action="">
+          <div class="row">
+            <div class="col-3">
+              <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                  <!-- <h6 class="mb-1 card-title">25/03/2020</h6"> -->
+                  <h5>Yasa Mulky Al Afgani</h5>
+                  <h6 class="text-secondary">Search is displaying incorrect result</h6>
+                  <span class="badge badge-pill badge-info">25 Mar 2020</span>
+                  <span class="badge badge-pill badge-warning">10:24</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                  <h5>Romi Agung</h5>
+                  <h6 class="text-secondary">Spacing in top bar is off</h6>
+                  <span class="badge badge-pill badge-info">20 Mar 2020</span>
+                  <span class="badge badge-pill badge-warning">11:20</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                  <h5>Eko Prasetyo</h5>
+                  <h6 class="text-secondary">Login with facebook doesn't work</h6>
+                  <span class="badge badge-pill badge-info">19 Mar 2020</span>
+                  <span class="badge badge-pill badge-warning">09:07</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                  <h5>Yasa Mulky Al Afgani</h5>
+                  <h6 class="text-secondary">Broken links on profile page</h6>
+                  <span class="badge badge-pill badge-info">19 Mar 2020</span>
+                  <span class="badge badge-pill badge-warning">08:40</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                  <h5>Eko Prasetyo</h5>
+                  <h6 class="text-secondary">File upload doesn't work on Safari</h6>
+                  <span class="badge badge-pill badge-info">12 Mar 2020</span>
+                  <span class="badge badge-pill badge-warning">16:18</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+<%- include('../partials/_footer.ejs') %>

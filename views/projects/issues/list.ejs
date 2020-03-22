@@ -1,0 +1,37 @@
+<%- include('../../partials/_sidebar.ejs') %>
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+  <div class="container-fluid">
+    <div
+      class="chartjs-size-monitor-expand"
+      style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+    >
+      <div
+        style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"
+      ></div>
+    </div>
+    <div
+      class="chartjs-size-monitor-shrink"
+      style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+    >
+      <div
+        style="position:absolute;width:200%;height:200%;left:0; top:0"
+      ></div>
+    </div>
+    <h1 class="display-4 mb-1"><%= title %></h1>
+    <p class="h5 mb-4 text-secondary">#1 Web Project - Company Profile</p>
+    <form action="">
+      <div class="row">
+        <div class="col">
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3>Filter</h3>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('../../partials/_footer.ejs') %>
