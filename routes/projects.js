@@ -52,9 +52,45 @@ module.exports = db => {
     });
   });
 
+  router.get("/members/add", helpers.isLoggedIn, (req, res, next) => {
+    res.render("projects/members/add", {
+      title: "Add member",
+      user: req.session.user,
+      url: 'projects',
+      subUrl: 'members'
+    });
+  });
+
+  router.get("/members/edit", helpers.isLoggedIn, (req, res, next) => {
+    res.render("projects/members/edit", {
+      title: "Edit member",
+      user: req.session.user,
+      url: 'projects',
+      subUrl: 'members'
+    });
+  });
+
   router.get("/issues", helpers.isLoggedIn, (req, res, next) => {
     res.render("projects/issues/list", {
       title: "Issues",
+      user: req.session.user,
+      url: 'projects',
+      subUrl: 'issues'
+    });
+  });
+
+  router.get("/issues/add", helpers.isLoggedIn, (req, res, next) => {
+    res.render("projects/issues/add", {
+      title: "Add issue",
+      user: req.session.user,
+      url: 'projects',
+      subUrl: 'issues'
+    });
+  });
+
+  router.get("/issues/edit", helpers.isLoggedIn, (req, res, next) => {
+    res.render("projects/issues/edit", {
+      title: "Edit issue",
       user: req.session.user,
       url: 'projects',
       subUrl: 'issues'

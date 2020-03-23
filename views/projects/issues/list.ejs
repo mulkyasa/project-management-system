@@ -14,24 +14,437 @@
       class="chartjs-size-monitor-shrink"
       style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
     >
-      <div
-        style="position:absolute;width:200%;height:200%;left:0; top:0"
-      ></div>
+      <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
     </div>
     <h1 class="display-4 mb-1"><%= title %></h1>
     <p class="h5 mb-4 text-secondary">#1 Web Project - Company Profile</p>
-    <form action="">
-      <div class="row">
-        <div class="col">
-          <div class="card shadow-sm mb-4">
-            <div class="card-body">
-              <h3>Filter</h3>
-              <hr>
+    <div class="shadow-sm card">
+      <div class="card-body">
+        <form action="">
+          <h3 class="h3 mb-3">Filters</h3>
+          <hr />
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-id" class="col-form-label">
+                <input type="checkbox" id="filter-id" name="filter-id" /> ID
+              </label>
+            </div>
+            <div class="col-sm-11">
+              <input
+                type="text"
+                class="form-control"
+                name="filter-id"
+                placeholder="ID"
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-subject" class="col-form-label">
+                <input
+                  type="checkbox"
+                  id="filter-subject"
+                  name="filter-subject"
+                />
+                Subject
+              </label>
+            </div>
+            <div class="col-sm-11">
+              <input
+                type="text"
+                class="form-control"
+                name="filter-subject"
+                placeholder="Subject"
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-issue" class="col-form-label">
+                <input type="checkbox" id="filter-issue" name="filter-issue" />
+                Issue
+              </label>
+            </div>
+            <div class="col-sm-11">
+              <select class="custom-select">
+                <option selected>Choose issue tracker</option>
+                <option value="Bug">Bug</option>
+                <option value="Feature">Feature</option>
+                <option value="Support">Support</option>
+              </select>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-dark" type="submit">
+            Search
+          </button>
+          <button type="button" class="btn btn-sm btn-default" type="submit">
+            Reset
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="shadow-sm card mt-3">
+      <div class="card-body">
+        <h3 class="h3 mb-3">Option</h3>
+        <hr />
+        <div class="form-group row">
+          <div class="col-sm-1">Columns</div>
+          <div class="col-sm-2">
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-id"
+                name="check-id"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-id">
+                ID
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-tracker"
+                name="check-tracker"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-tracker">
+                Tracker
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-subject"
+                name="check-subject"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-subject">
+                Subject
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-description"
+                name="check-description"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-description">
+                Description
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-status"
+                name="check-status"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-status">
+                Status
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-priority"
+                name="check-priority"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-priority">
+                Priority
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-asignee"
+                name="check-asignee"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-asignee">
+                Asignee
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-start-date"
+                name="check-start-date"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-start-date">
+                Start date
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-due-date"
+                name="check-due-date"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-due-date">
+                Due date
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-estimated"
+                name="check-estimated"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-estimated">
+                Estimated
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-done"
+                name="check-done"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-done">
+                Done
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-author"
+                name="check-author"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-author">
+                Author
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-spent-time"
+                name="check-spent-time"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-spent-time">
+                Spent time
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-file"
+                name="check-file"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-file">
+                File
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-target-version"
+                name="check-target-version"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-target-version">
+                Target version
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-created-date"
+                name="check-created-date"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-created-date">
+                Created date
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-updated-date"
+                name="check-updated-date"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-updated-date">
+                Updated date
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-closed-date"
+                name="check-closed-date"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-closed-date">
+                Closed date
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-parent-task"
+                name="check-parent-task"
+                value="true"
+                checked
+              />
+              <label class="form-check-label" for="check-parent-task">
+                Parent task
+              </label>
             </div>
           </div>
         </div>
+        <button type="button" class="btn btn-sm btn-dark" type="submit">
+          Apply
+        </button>
+        <div class="row mt-4">
+          <div class="col-sm">
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col-sm">ID</th>
+                  <th scope="col-sm">Tracker</th>
+                  <th scope="col-sm">Subject</th>
+                  <th scope="col-sm">Description</th>
+                  <th scope="col-sm">Status</th>
+                  <th scope="col-sm">Priority</th>
+                  <th scope="col-sm">Asignee</th>
+                  <th scope="col-sm">Start date</th>
+                  <th scope="col-sm">Due date</th>
+                  <th scope="col-sm">Estimated</th>
+                  <th scope="col-sm">Done</th>
+                  <th scope="col-sm">Author</th>
+                  <th scope="col-sm">Spent time</th>
+                  <th scope="col-sm">File</th>
+                  <th scope="col-sm">Target version</th>
+                  <th scope="col-sm">Created date</th>
+                  <th scope="col-sm">Updated date</th>
+                  <th scope="col-sm">Closed date</th>
+                  <th scope="col-sm">Parent task</th>
+                  <th scope="col-sm">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <a href="/projects/issues/edit">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-success btn-block mb-2"
+                        type="submit"
+                      >
+                        Edit
+                      </button>
+                    </a>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-danger btn-block"
+                      type="submit"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">Previous</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+        <a href="/projects/issues/add">
+          <button type="button" class="btn btn-sm btn-dark">Add data</button>
+        </a>
       </div>
-    </form>
+    </div>
   </div>
 </main>
 <%- include('../../partials/_footer.ejs') %>

@@ -29,6 +29,28 @@
 <!-- Icons -->
 <script src="../../javascripts/feather.min.js"></script>
 <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const rows = document.querySelectorAll("tr[data-href]");
+    console.log(rows)
+    rows.forEach(row => {
+      row.addEventListener("click", () => {
+        window.location.href = row.dataset.href;
+      });
+    });
+  });
+
+  // $(document).ready(() => {
+  //   $(document.body).on('click', 'tr[data-href]', () => {
+  //     window.location.href = this.dataset.href;
+  //   });
+  // });
+
+  // $(document).ready(function($) {
+  //   $(".table-row").click(function() {
+  //       window.document.location = $(this).data("href");
+  //   });
+  // });
+
   feather.replace();
 </script>
 </body>

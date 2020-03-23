@@ -81,6 +81,10 @@ body {
   padding-top: 60px; /* Space for fixed navbar */
 }
 
+.table-row {
+  cursor: pointer;
+}
+
 .footer > .container {
   font-size: 12px;
   padding-right: 15px;
