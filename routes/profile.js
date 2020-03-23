@@ -17,6 +17,7 @@ module.exports = db => {
       });
     });
   });
+
   router.post("/", helpers.isLoggedIn, (req, res) => {
     const {
       firstname,
@@ -41,5 +42,7 @@ module.exports = db => {
       });
     });
   });
+
   return router;
+
 };

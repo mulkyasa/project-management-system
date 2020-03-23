@@ -14,9 +14,7 @@
       class="chartjs-size-monitor-shrink"
       style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
     >
-      <div
-        style="position:absolute;width:200%;height:200%;left:0; top:0"
-      ></div>
+      <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
     </div>
     <h1 class="display-4 mb-1"><%= title %></h1>
     <p class="h5 mb-4 text-secondary">#1 Web Project - Company Profile</p>
@@ -24,11 +22,11 @@
       <div class="card-body">
         <form action="">
           <h3 class="h3 mb-3">Filters</h3>
-          <hr>
+          <hr />
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-id" class="col-form-label">
-                <input type="checkbox" id="filter-id" name="filter-id"/> ID
+                <input type="checkbox" id="filter-id" name="filter-id" /> ID
               </label>
             </div>
             <div class="col-sm-11">
@@ -43,7 +41,8 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-name" class="col-form-label">
-                <input type="checkbox" id="filter-name" name="filter-name"/> Name
+                <input type="checkbox" id="filter-name" name="filter-name" />
+                Name
               </label>
             </div>
             <div class="col-sm-11">
@@ -58,7 +57,12 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-position" class="col-form-label">
-                <input type="checkbox" id="filter-position" name="filter-position"/> Position
+                <input
+                  type="checkbox"
+                  id="filter-position"
+                  name="filter-position"
+                />
+                Position
               </label>
             </div>
             <div class="col-sm-11">
@@ -70,20 +74,31 @@
               </select>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-dark" type="submit">Search</button>
-          <button type="button" class="btn btn-sm btn-default" type="submit">Reset</button>
+          <button type="button" class="btn btn-sm btn-dark" type="submit">
+            Search
+          </button>
+          <button type="button" class="btn btn-sm btn-default" type="submit">
+            Reset
+          </button>
         </form>
       </div>
     </div>
     <div class="shadow-sm card mt-3">
       <div class="card-body">
         <h3 class="h3 mb-3">Option</h3>
-        <hr>
+        <hr />
         <div class="form-group row">
           <div class="col-sm-2">Columns</div>
           <div class="col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check-id" name="check-id" value="true">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-id"
+                name="check-id"
+                value="true"
+                checked
+              />
               <label class="form-check-label" for="check-id">
                 ID
               </label>
@@ -91,7 +106,14 @@
           </div>
           <div class="col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check-name" name="check-name" value="true">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-name"
+                name="check-name"
+                value="true"
+                checked
+              />
               <label class="form-check-label" for="check-name">
                 Name
               </label>
@@ -99,14 +121,23 @@
           </div>
           <div class="col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check-position" name="check-position" value="true">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check-position"
+                name="check-position"
+                value="true"
+                checked
+              />
               <label class="form-check-label" for="check-position">
                 Position
               </label>
             </div>
           </div>
           <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-dark" type="submit">Apply</button>
+            <button type="button" class="btn btn-sm btn-dark" type="submit">
+              Apply
+            </button>
           </div>
         </div>
         <div class="row mt-4">
@@ -127,9 +158,21 @@
                   <td>Manager</td>
                   <td>
                     <a href="/projects/members/edit">
-                      <button type="button" class="btn btn-sm btn-success" type="submit">Edit</button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        type="submit"
+                      >
+                        Edit
+                      </button>
                     </a>
-                    <button type="button" class="btn btn-sm btn-danger" type="submit">Delete</button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-danger"
+                      type="submit"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -138,11 +181,21 @@
         </div>
         <nav aria-label="Page navigation">
           <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">Previous</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#">Next</a>
+            </li>
           </ul>
         </nav>
         <a href="/projects/members/add">
