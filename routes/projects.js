@@ -4,17 +4,25 @@ const helpers = require("../helpers/util");
 
 module.exports = db => {
   router.get("/", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/list", {
-      title: "Projects",
-      user: req.session.user,
-      url: "projects"
+    let sqlProjects = `SELECT DISTINCT projects.projectid, projects.name, STRING_AGG(users.firstname || ' ' || users.lastname, ', ') as membersname FROM projects
+    JOIN members ON members.projectid = projects.projectid JOIN users ON members.userid = users.userid GROUP BY projects.projectid;`;
+    console.log(sqlProjects);
+    
+    db.query(sqlProjects, (err, projectData) => {
+      if (err) res.status(500).json(err);
+      res.render("projects/list", {
+        title: "Projects",
+        url: "projects",
+        user: req.session.user,
+        data: projectData.rows
+      });
     });
   });
 
   router.get("/add", helpers.isLoggedIn, (req, res, next) => {
     let sql = `SELECT * FROM users ORDER BY userid`;
     db.query(sql, (err, data) => {
-      if(err) res.status(500).json(err);
+      if (err) res.status(500).json(err);
       let result = data.rows.map(item => item);
 
       res.render("projects/add", {
@@ -27,34 +35,38 @@ module.exports = db => {
 
   router.post("/add", helpers.isLoggedIn, (req, res, next) => {
     const { name, member } = req.body;
-    console.log(req.body)
-    if(name && member) {
+    if (name && member) {
       let sqlProject = `INSERT INTO projects (name) VALUES ('${name}')`;
-      console.log(sqlProject);
       db.query(sqlProject, (err, data) => {
-        if(err) res.status(500).json(err);
-        
+        if (err) res.status(500).json(err);
+
         let sqlMax = `SELECT MAX (projectid) FROM projects`;
         db.query(sqlMax, (err, dataMax) => {
+          if (err) res.status(500).json(err);
+
           let resultMax = dataMax.rows[0].max;
-          let sqlMember = `INSERT INTO members (userid, role, projectid) VALUES`
-          if(typeof member == 'string') {
+          let sqlMember = `INSERT INTO members (userid, role, projectid) VALUES`;
+          if (typeof member == "string") {
             sqlMember += ` (${member}, ${resultMax})`;
           } else {
-            let members = member.map((item) => {
-              return `(${item}, ${resultMax})`
-            }).join(',')
-            sqlMember += `${members}`
-          };
-          db.query(sqlMember, (err, dataSelect) => {
-            res.redirect('/projects')
+            let members = member
+              .map(item => {
+                return `(${item}, ${resultMax})`;
+              })
+              .join(",");
+            sqlMember += `${members}`;
+          }
+          db.query(sqlMember, err => {
+            if (err) res.status(500).json(err);
+
+            res.redirect("/projects");
           });
         });
       });
     } else {
-      req.flash('projectsMessage', 'Please add project name and members!');
-      res.redirect('/projects/add');
-    };
+      req.flash("projectsMessage", "Please add project name and members!");
+      res.redirect("/projects/add");
+    }
   });
 
   router.get("/edit", helpers.isLoggedIn, (req, res, next) => {

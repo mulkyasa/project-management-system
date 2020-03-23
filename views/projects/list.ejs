@@ -137,29 +137,31 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="table-row" data-href="/projects/overview">
-                  <th scope="row">1</th>
-                  <td>Web App Project - Company Name</td>
-                  <td>Yasa Mulky Al Afgani, Eko Prasetyo, Romi Agung</td>
-                  <td>
-                    <a href="/projects/edit">
+                <% data.forEach((item) => { %>
+                  <tr class="table-row" data-href="/projects/overview">
+                    <th scope="row"><%= item.projectid %></th>
+                    <td><%= item.name %></td>
+                    <td><%= item.membersname %></td>
+                    <td>
+                      <a href="/projects/edit">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-success"
+                          type="submit"
+                        >
+                          Edit
+                        </button>
+                      </a>
                       <button
                         type="button"
-                        class="btn btn-sm btn-success"
+                        class="btn btn-sm btn-danger"
                         type="submit"
                       >
-                        Edit
+                        Delete
                       </button>
-                    </a>
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-danger"
-                      type="submit"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>
