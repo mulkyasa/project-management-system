@@ -4,35 +4,64 @@ const helpers = require("../helpers/util");
 
 module.exports = db => {
   router.get("/", helpers.isLoggedIn, (req, res, next) => {
-
-    const { checkId, inputId, checkName, inputName, check } = req.query;
+    let sqlProjects = `SELECT COUNT(ID) AS TOTAL FROM (SELECT DISTINCT projects.projectid as id FROM projects
+      LEFT JOIN members ON members.projectid = projects.projectid
+      LEFT JOIN users ON users.userid = members.userid`;
+      const page = req.query.page || 1;
+      const limit = 3;
+      const offset = (page - 1) * limit;
+      const link = req.url == "/" ? "/?page=1" : req.url;
+    const { checkId, inputId, checkName, inputName, checkMember, inputMember } = req.query;
     let result = [];
 
     if (checkId && inputId) {
-      result.push(`userid = ${inputId}`);
-      filterData = true;
+      result.push(`projects.projectid = ${inputId}`);
+    };
+    if (checkName && inputName) {
+      result.push(`projects.name ILIKE '%${inputName}%'`);
+    };
+    if (checkMember && inputMember) {
+      result.push(`members.userid = ${inputMember}`);
     };
     if (result.length > 0) {
       sqlProjects += ` WHERE ${result.join(" AND ")}`;
     };
 
-    sqlProjects += ` ORDER BY projects.projectid`;
-
-    let sqlUsers = `SELECT CONCAT(firstname, ' ', lastname) as fullname FROM users`;
-    db.query(sqlUsers, (err, usersData) => {
+    sqlProjects += `) AS total`;
+    console.log(sqlProjects);
+    db.query(sqlProjects, (err, dataProjects) => {
       if (err) res.status(500).json(err);
+
+      const total = dataProjects.rows[0].total;
+      const pages = Math.ceil(total / limit);
       let sqlProjects = `SELECT DISTINCT projects.projectid, projects.name, STRING_AGG(users.firstname || ' ' || users.lastname, ', ') as membersname FROM projects
       JOIN members ON members.projectid = projects.projectid
-      JOIN users ON members.userid = users.userid 
-      GROUP BY projects.projectid`;
+      JOIN users ON members.userid = users.userid`;
+      
+      if (result.length > 0) {
+        sqlProjects += ` WHERE ${result.join(" AND ")}`;
+      };
+
+      sqlProjects += ` GROUP BY projects.projectid ORDER BY projectid ASC LIMIT ${limit} OFFSET ${offset}`;
+
       db.query(sqlProjects, (err, projectData) => {
         if (err) res.status(500).json(err);
-        res.render("projects/list", {
-          title: "Projects",
-          url: "projects",
-          user: req.session.user,
-          data: projectData.rows,
-          usersData: usersData.rows
+
+        let sqlUsers = `SELECT userid, CONCAT(firstname, ' ', lastname) as fullname FROM users`;
+        db.query(sqlUsers, (err, usersData) => {
+          if (err) res.status(500).json(err);
+
+          res.render("projects/list", {
+            title: "Projects",
+            url: "projects",
+            query: req.query,
+            user: req.session.user,
+            data: projectData.rows,
+            usersData: usersData.rows,
+            pages,
+            page,
+            link
+          });
         });
       });
     });
@@ -42,6 +71,7 @@ module.exports = db => {
     let sql = `SELECT * FROM users ORDER BY userid`;
     db.query(sql, (err, data) => {
       if (err) res.status(500).json(err);
+
       let result = data.rows.map(item => item);
 
       res.render("projects/add", {
@@ -94,10 +124,12 @@ module.exports = db => {
     const sqlUsers = `SELECT userid, CONCAT(firstname, ' ', lastname) as fullname FROM users`;
     db.query(sqlUsers, (err, dataUsers) => {
       if (err) res.status(500).json(err);
+
       let sqlProjects = `SELECT DISTINCT projects.projectid, projects.name, members.userid, concat(users.firstname || ' ' || users.lastname) as fullname FROM projects LEFT JOIN members ON members.projectid = projects.projectid
       LEFT JOIN users ON users.userid = members.userid WHERE projects.projectid = $1`;
       db.query(sqlProjects, id, (err, dataProjects) => {
         if (err) res.status(500).json(err);
+
         res.render("projects/edit", {
           title: "Edit Project",
           url: "projects",
@@ -113,13 +145,14 @@ module.exports = db => {
     const { name, member } = req.body;
     const { id } = req.params;
     let sqlEdit = `UPDATE projects SET name = '${name}' WHERE projectid = ${id}`;
-    console.log(sqlEdit);
     db.query(sqlEdit, err => {
       if (err) res.status(500).json(err);
+
       let sqlDelMember = `DELETE FROM members WHERE projectid = $1`;
       console.log(sqlDelMember);
       db.query(sqlDelMember, [id], err => {
         if (err) res.status(500).json(err);
+
         let temp = [];
         if (typeof member == "string") {
           temp.push(`(${member}, ${id})`);
@@ -133,6 +166,7 @@ module.exports = db => {
         )}`;
         db.query(sqlUpdate, err => {
           if (err) res.status(500).json(err);
+
           res.redirect(`/projects`);
         });
       });
@@ -143,10 +177,12 @@ module.exports = db => {
     let deleteProject = "DELETE FROM members WHERE projectid = $1";
     const id = [req.params.id];
     db.query(deleteProject, id, err => {
-      if (err) throw err;
+      if (err) res.status(500).json(err);
+
       deleteProject = "DELETE FROM projects WHERE projectid = $1";
       db.query(deleteProject, id, err => {
-        if (err) throw err;
+        if (err) res.status(500).json(err);
+
         res.redirect("/projects");
       });
     });
