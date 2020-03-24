@@ -8,6 +8,9 @@ module.exports = db => {
   /* GET users listing. */
   router.get("/", helpers.isLoggedIn, (req, res) => {
     const link = req.url == "/" ? "/?page=1" : req.url;
+    const page = req.query.page || 1;
+    const limit = 3;
+    const offset = (page - 1) * limit;
     let sql = `SELECT userid, email, password, CONCAT(firstname,' ',lastname) AS name, position, typejob FROM users`;
     // filter users
     let result = [];
@@ -50,10 +53,6 @@ module.exports = db => {
     }
 
     sql += ` ORDER BY userid`;
-
-    const page = req.query.page || 1;
-    const limit = 3;
-    const offset = (page - 1) * limit;
 
     db.query(sql, (err, data) => {
       if (err) res.status(500).json(err);

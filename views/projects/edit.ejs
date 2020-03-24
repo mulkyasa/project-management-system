@@ -32,7 +32,7 @@
                     type="checkbox"
                     id="<%= item.userid %>"
                     name="member"
-                    value="<%= item.userid %>"
+                    value="<%= item.userid %>, '<%= item.position %>' %>"
                     <%= members.includes(item.userid) ? 'checked' : '' %>
                   />
                   <label class="form-check-label" for="<%= item.userid %>">

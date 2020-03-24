@@ -5,20 +5,20 @@
     <h1 class="display-4 mb-4"><%= title %></h1>
     <div class="shadow-sm card">
       <div class="card-body">
-        <form action="">
+        <form method="GET">
           <h3 class="h3 mb-3">Filters</h3>
           <hr />
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-id" class="col-form-label">
-                <input type="checkbox" id="filter-id" name="filter-id" /> ID
+                <input type="checkbox" id="filter-id" name="checkId" /> ID
               </label>
             </div>
             <div class="col-sm-10">
               <input
                 type="text"
                 class="form-control"
-                name="filter-id"
+                name="inputId"
                 placeholder="ID"
               />
             </div>
@@ -26,7 +26,7 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-name" class="col-form-label">
-                <input type="checkbox" id="filter-name" name="filter-name" />
+                <input type="checkbox" id="filter-name" name="checkName" />
                 Name
               </label>
             </div>
@@ -34,7 +34,7 @@
               <input
                 type="text"
                 class="form-control"
-                name="filter-name"
+                name="inputName"
                 placeholder="Name"
               />
             </div>
@@ -45,24 +45,24 @@
                 <input
                   type="checkbox"
                   id="filter-member"
-                  name="filter-member"
+                  name="checkMember"
                 />
                 Member
               </label>
             </div>
             <div class="col-sm-10">
-              <select class="custom-select">
+              <select class="custom-select" name="inputMember">
                 <option selected>Choose member</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <% usersData.forEach((item) => { %>
+                  <option value="<%= item.fullname %>"><%= item.fullname %></option>
+                <% }); %>
               </select>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-dark" type="submit">
+          <button class="btn btn-sm btn-dark" type="submit">
             Search
           </button>
-          <button type="button" class="btn btn-sm btn-default" type="submit">
+          <button class="btn btn-sm btn-default" type="submit">
             Reset
           </button>
         </form>

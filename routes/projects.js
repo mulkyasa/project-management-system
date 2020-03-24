@@ -4,16 +4,36 @@ const helpers = require("../helpers/util");
 
 module.exports = db => {
   router.get("/", helpers.isLoggedIn, (req, res, next) => {
-    let sqlProjects = `SELECT DISTINCT projects.projectid, projects.name, STRING_AGG(users.firstname || ' ' || users.lastname, ', ') as membersname FROM projects
-    JOIN members ON members.projectid = projects.projectid JOIN users ON members.userid = users.userid GROUP BY projects.projectid`;
 
-    db.query(sqlProjects, (err, projectData) => {
+    const { checkId, inputId, checkName, inputName, check } = req.query;
+    let result = [];
+
+    if (checkId && inputId) {
+      result.push(`userid = ${inputId}`);
+      filterData = true;
+    };
+    if (result.length > 0) {
+      sqlProjects += ` WHERE ${result.join(" AND ")}`;
+    };
+
+    sqlProjects += ` ORDER BY projects.projectid`;
+
+    let sqlUsers = `SELECT CONCAT(firstname, ' ', lastname) as fullname FROM users`;
+    db.query(sqlUsers, (err, usersData) => {
       if (err) res.status(500).json(err);
-      res.render("projects/list", {
-        title: "Projects",
-        url: "projects",
-        user: req.session.user,
-        data: projectData.rows
+      let sqlProjects = `SELECT DISTINCT projects.projectid, projects.name, STRING_AGG(users.firstname || ' ' || users.lastname, ', ') as membersname FROM projects
+      JOIN members ON members.projectid = projects.projectid
+      JOIN users ON members.userid = users.userid 
+      GROUP BY projects.projectid`;
+      db.query(sqlProjects, (err, projectData) => {
+        if (err) res.status(500).json(err);
+        res.render("projects/list", {
+          title: "Projects",
+          url: "projects",
+          user: req.session.user,
+          data: projectData.rows,
+          usersData: usersData.rows
+        });
       });
     });
   });
@@ -92,22 +112,25 @@ module.exports = db => {
   router.post("/edit/:id", helpers.isLoggedIn, (req, res, next) => {
     const { name, member } = req.body;
     const { id } = req.params;
-    let sqlEdit = `UPDATE projects SET name = ${name} WHERE projectid = ${id}`;
+    let sqlEdit = `UPDATE projects SET name = '${name}' WHERE projectid = ${id}`;
     console.log(sqlEdit);
-    db.query(sqlEdit, [name, id], err => {
+    db.query(sqlEdit, err => {
       if (err) res.status(500).json(err);
       let sqlDelMember = `DELETE FROM members WHERE projectid = $1`;
-      db.query(sqlDelMember, [id], (err) => {
+      console.log(sqlDelMember);
+      db.query(sqlDelMember, [id], err => {
         if (err) res.status(500).json(err);
         let temp = [];
         if (typeof member == "string") {
-          temp.push(`(${member}, ${id})`)
+          temp.push(`(${member}, ${id})`);
         } else {
           for (let i = 0; i < member.length; i++) {
-            temp.push(`(${member[i]}, ${id})`)
-          };
-        };
-        let sqlUpdate = `INSERT INTO members(userid, role, projectid) VALUES ${temp.join(',')}`;
+            temp.push(`(${member[i]}, ${id})`);
+          }
+        }
+        let sqlUpdate = `INSERT INTO members(userid, role, projectid) VALUES ${temp.join(
+          ","
+        )}`;
         db.query(sqlUpdate, err => {
           if (err) res.status(500).json(err);
           res.redirect(`/projects`);
@@ -116,18 +139,18 @@ module.exports = db => {
     });
   });
 
-  router.get('/delete/:id',  (req, res, next) => {
-    let deleteProject = 'DELETE FROM members WHERE projectid = $1';
+  router.get("/delete/:id", (req, res, next) => {
+    let deleteProject = "DELETE FROM members WHERE projectid = $1";
     const id = [req.params.id];
-    db.query(deleteProject, id, (err) => {
+    db.query(deleteProject, id, err => {
+      if (err) throw err;
+      deleteProject = "DELETE FROM projects WHERE projectid = $1";
+      db.query(deleteProject, id, err => {
         if (err) throw err;
-        deleteProject = 'DELETE FROM projects WHERE projectid = $1';
-        db.query(deleteProject, id, (err) => {
-            if (err) throw err;
-            res.redirect('/projects');
-        })
+        res.redirect("/projects");
+      });
     });
-})
+  });
 
   router.get("/overview", helpers.isLoggedIn, (req, res, next) => {
     res.render("projects/overview", {
