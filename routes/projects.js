@@ -28,7 +28,6 @@ module.exports = db => {
     };
 
     sqlProjects += `) AS total`;
-    console.log(sqlProjects);
     db.query(sqlProjects, (err, dataProjects) => {
       if (err) res.status(500).json(err);
 
@@ -149,7 +148,6 @@ module.exports = db => {
       if (err) res.status(500).json(err);
 
       let sqlDelMember = `DELETE FROM members WHERE projectid = $1`;
-      console.log(sqlDelMember);
       db.query(sqlDelMember, [id], err => {
         if (err) res.status(500).json(err);
 
