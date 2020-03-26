@@ -1,3 +1,90 @@
 <%- include('../../partials/_sidebar.ejs') %>
-
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+  <div class="container-fluid">
+    <div
+      class="chartjs-size-monitor-expand"
+      style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+    >
+      <div
+        style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"
+      ></div>
+    </div>
+    <div
+      class="chartjs-size-monitor-shrink"
+      style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"
+    >
+      <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+    </div>
+    <h1 class="display-4 mb-1"><%= title %></h1>
+    <p class="h5 mb-4 text-secondary">#<%= result.projectid %> <%= result.name %></p>
+    <div class="shadow-sm card">
+      <div class="card-body">
+        <form method="POST">
+          <h3 class="h3 mb-3">Filters</h3>
+          <hr />
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="filter-id" class="col-form-label">ID</label>
+            </div>
+            <div class="col-sm-11">
+              <select class="custom-select" name="member" disabled>
+                <option>Choose member</option>
+                <option value="<%= usersData.userid %>" selected><%= usersData.fullname %></option>
+              </select>
+            </div>
+          </div>
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm pt-0">Position</legend>
+              <div class="col-sm-11">
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="manager"
+                    name="role"
+                    value="Manager"
+                    <%= usersData.role == 'Manager' ? 'checked' : '' %>
+                  />
+                  <label class="form-check-label" for="manager">
+                    Manager
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="software-developer"
+                    name="role"
+                    value="Software Developer"
+                    <%= usersData.role == 'Software Developer' ? 'checked' : '' %>
+                  />
+                  <label class="form-check-label" for="software-developer">
+                    Software Developer
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="quality-assurance"
+                    name="role"
+                    value="Quality Assurance"
+                    <%= usersData.role == 'Quality Assurance' ? 'checked' : '' %>
+                  />
+                  <label class="form-check-label" for="quality-assurance">
+                    Quality Assurance
+                  </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <button class="btn btn-sm btn-dark" type="submit">
+            Save data
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
 <%- include('../../partials/_footer.ejs') %>

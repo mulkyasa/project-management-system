@@ -21,6 +21,7 @@
     <div class="shadow-sm card">
       <div class="card-body">
         <form method="GET">
+          <input type="hidden" id="page" name="page" value="1" />
           <h3 class="h3 mb-3">Filters</h3>
           <hr />
           <div class="form-group row">
@@ -67,7 +68,7 @@
             </div>
             <div class="col-sm-11">
               <select class="custom-select">
-                <option selected>Choose position</option>
+                <option selected disabled>Choose position</option>
                 <option value="Manager">Manager</option>
                 <option value="Quality Assurance">Quality Assurance</option>
                 <option value="Software Developer">Software Developer</option>
@@ -158,7 +159,7 @@
                     <td><%= item.fullname %></td>
                     <td><%= item.role %></td>
                     <td>
-                      <a href="/projects/members/edit">
+                      <a href="/projects/members/<%= item.projectid %>/edit/<%= item.id %>">
                         <button
                           type="button"
                           class="btn btn-sm btn-success"

@@ -269,6 +269,7 @@ module.exports = db => {
     });
   });
 
+  // project member addition page
   router.get(
     "/members/:projectid/add",
     helpers.isLoggedIn,
@@ -278,32 +279,93 @@ module.exports = db => {
 
       db.query(sqlData, [projectid], (err, data) => {
         if (err) res.status(500).json(err);
-        res.render("projects/members/add", {
-          title: "Add member",
-          user: req.session.user,
-          url: "projects",
-          subUrl: "members",
-          result: data.rows[0]
+
+        let sqlUsers = `SELECT userid, email, CONCAT(firstname, ' ', lastname) AS fullname FROM users
+        WHERE userid NOT IN (SELECT userid FROM members WHERE projectid = $1)`;
+        db.query(sqlUsers, [projectid], (err, usersData) => {
+          res.render("projects/members/add", {
+            title: "Add member",
+            user: req.session.user,
+            url: "projects",
+            subUrl: "members",
+            usersData: usersData.rows,
+            result: data.rows[0]
+          });
         });
       });
     }
   );
 
-  router.get("/members/edit/:projectid", helpers.isLoggedIn, (req, res, next) => {
-    const { projectid } = req.params;
-    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+  // to post the addition of project members
+  router.post("/members/:projectid/add", helpers.isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params;
+    let {member, position} = req.body;
+    let sqlMembers = `INSERT INTO members (userid, role, projectid) VALUES ($1, $2, $3)`;
 
-    db.query(sqlData, [projectid], (err, data) => {
+    db.query(sqlMembers, [member, position, projectid], (err) => {
       if (err) res.status(500).json(err);
-      res.render("projects/members/edit", {
-        title: "Edit member",
-        user: req.session.user,
-        url: "projects",
-        subUrl: "members",
-        result: data.rows[0]
-      });
+      res.redirect(`/projects/members/${projectid}`);
     });
   });
+
+  router.get(
+    "/members/:projectid/edit/:memberid",
+    helpers.isLoggedIn,
+    (req, res, next) => {
+      const { projectid, memberid } = req.params;
+      let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+      db.query(sqlData, [projectid], (err, data) => {
+        if (err) res.status(500).json(err);
+
+        let sqlUsers = `SELECT CONCAT(users.firstname, ' ' ,users.lastname) AS fullname, members.role, members.id FROM members
+        LEFT JOIN users ON users.userid = members.userid
+        LEFT JOIN projects ON projects.projectid = members.projectid WHERE projects.projectid = $1 AND id = $2`;
+        db.query(sqlUsers, [projectid, memberid], (err, usersData) => {
+          if (err) res.status(500).json(err);
+
+          res.render("projects/members/edit", {
+            title: "Edit member",
+            user: req.session.user,
+            url: "projects",
+            subUrl: "members",
+            result: data.rows[0],
+            usersData: usersData.rows[0]
+          });
+        });
+      });
+    }
+  );
+
+  router.post(
+    "/members/:projectid/edit/:memberid",
+    helpers.isLoggedIn,
+    (req, res, next) => {
+      const {projectid, memberid} = req.params;
+      const {role} = req.body;
+      console.log(req.body)
+      let sqlEdit = `UPDATE members SET role = $1 WHERE id = $2`
+
+      db.query(sqlEdit, [role, memberid], (err) => {
+        if (err) res.status(500).json(err);
+
+        res.redirect(`/projects/members/${projectid}`)
+      });
+    }
+  );
+
+  router.get(
+    '/members/:projectid/delete/:memberid',
+    helpers.isLoggedIn,
+    (req, res, next) => {
+      const {projectid, memberid} = req.params;
+
+      let sqlDelete = `DELETE FROM members WHERE projectid = $1 AND id = $2`
+      pool.query(sqlDelete, [projectid, memberid], err => {
+        if (err) res.status(500).json(err)
+        res.redirect(`/project/member/${projectid}`)
+      });
+    }
+  );
 
   router.get("/issues/:projectid", helpers.isLoggedIn, (req, res, next) => {
     const { projectid } = req.params;
@@ -337,20 +399,24 @@ module.exports = db => {
     });
   });
 
-  router.get("/issues/edit/:projectid", helpers.isLoggedIn, (req, res, next) => {
-    const { projectid } = req.params;
-    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+  router.get(
+    "/issues/edit/:projectid",
+    helpers.isLoggedIn,
+    (req, res, next) => {
+      const { projectid } = req.params;
+      let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
 
-    db.query(sqlData, [projectid], (err, data) => {
-      if (err) res.status(500).json(err);
-      res.render("projects/issues/edit", {
-        title: "Edit issue",
-        user: req.session.user,
-        url: "projects",
-        subUrl: "issues"
+      db.query(sqlData, [projectid], (err, data) => {
+        if (err) res.status(500).json(err);
+        res.render("projects/issues/edit", {
+          title: "Edit issue",
+          user: req.session.user,
+          url: "projects",
+          subUrl: "issues"
+        });
       });
-    });
-  });
+    }
+  );
 
   return router;
 };

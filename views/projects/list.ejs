@@ -53,7 +53,7 @@
             </div>
             <div class="col-sm-10">
               <select class="custom-select" name="inputMember">
-                <option selected>Choose member</option>
+                <option selected disabled>Choose member</option>
                 <% usersData.forEach((item) => { %>
                   <option value="<%= item.userid %>"><%= item.fullname %></option>
                 <% }); %>
