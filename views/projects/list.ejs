@@ -141,11 +141,11 @@
               </thead>
               <tbody>
                 <% data.forEach((item) => { %>
-                  <tr class="table-row" data-href="/projects/overview">
+                  <tr class="table-row" data-href="/projects/overview/<%= item.projectid %>">
                     <th scope="row"><%= item.projectid %></th>
                     <td><%= item.name %></td>
                     <td><%= item.membersname %></td>
-                    <td>
+                    <td>W
                       <a href="/projects/edit/<%= item.projectid %>">
                         <button
                           type="button"
@@ -181,13 +181,13 @@
               >
             </li>
             <% for(let i = 1; i <= pages; i++) { %>
-            <li class="page-item<%= i == page ? ' active' : '' %>">
-              <a
-                class="page-link"
-                href="/projects<%= link.replace(`page=${page}`, `page=${i}`) %>"
-                ><%= i %></a
-              >
-            </li>
+              <li class="page-item<%= i == page ? ' active' : '' %>">
+                <a
+                  class="page-link"
+                  href="/projects<%= link.replace(`page=${page}`, `page=${i}`) %>"
+                  ><%= i %></a
+                >
+              </li>
             <% }; %>
             <li class="page-item<%= page == pages ? ' disabled' : '' %>">
               <a

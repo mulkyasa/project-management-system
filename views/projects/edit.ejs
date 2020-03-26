@@ -8,6 +8,11 @@
         <form method="POST">
           <h3 class="h3 mb-3">Filters</h3>
           <hr />
+          <% if(projectsMessage.length > 0) { %>
+            <div class="alert alert-danger" role="alert">
+              <%= projectsMessage %>
+            </div>
+            <% }; %>
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-name" class="col-form-label">Name</label>

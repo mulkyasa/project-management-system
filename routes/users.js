@@ -146,7 +146,7 @@ module.exports = db => {
 
   router.get("/delete/:userid", helpers.isLoggedIn, (req, res) => {
     const { userid } = req.params;
-    db.query(`DELETE FROM users WHERE userid = $1`, [userid], (err, data) => {
+    db.query(`DELETE FROM users, me WHERE userid = $1`, [userid], (err, data) => {
       if (err) res.status(500).json(err);
       res.redirect("/users");
     });

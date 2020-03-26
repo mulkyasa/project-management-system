@@ -25,7 +25,8 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link <%= subUrl == 'overview' ? 'active' : '' %>" href="/projects/overview">
+            <a class="nav-link <%= subUrl == 'overview' ? 'active' : '' %>"
+              href="/projects/overview/<%= result.projectid %>">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -47,7 +48,8 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link <%= subUrl == 'activity' ? 'active' : '' %>" href="/projects/activity">
+            <a class="nav-link <%= subUrl == 'activity' ? 'active' : '' %>"
+              href="/projects/activity/<%= result.projectid %>">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -80,7 +82,8 @@
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link <%= subUrl == 'members' ? 'active' : '' %>" href="/projects/members">
+            <a class="nav-link <%= subUrl == 'members' ? 'active' : '' %>"
+              href="/projects/members/<%= result.projectid %>">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -102,7 +105,8 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link  <%= subUrl == 'issues' ? 'active' : '' %>" href="/projects/issues">
+            <a class="nav-link  <%= subUrl == 'issues' ? 'active' : '' %>"
+              href="/projects/issues/<%= result.projectid %>">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

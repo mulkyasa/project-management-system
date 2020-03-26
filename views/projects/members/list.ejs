@@ -17,10 +17,10 @@
       <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
     </div>
     <h1 class="display-4 mb-1"><%= title %></h1>
-    <p class="h5 mb-4 text-secondary">#1 Web Project - Company Profile</p>
+    <p class="h5 mb-4 text-secondary">#<%= result.projectid %> <%= result.name %></p>
     <div class="shadow-sm card">
       <div class="card-body">
-        <form action="">
+        <form method="GET">
           <h3 class="h3 mb-3">Filters</h3>
           <hr />
           <div class="form-group row">
@@ -152,29 +152,31 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Eko Prasetyo</td>
-                  <td>Manager</td>
-                  <td>
-                    <a href="/projects/members/edit">
+                <% data.forEach((item) => { %>
+                  <tr>
+                    <th scope="row"><%= item.id %></th>
+                    <td><%= item.fullname %></td>
+                    <td><%= item.role %></td>
+                    <td>
+                      <a href="/projects/members/edit">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-success"
+                          type="submit"
+                        >
+                          Edit
+                        </button>
+                      </a>
                       <button
                         type="button"
-                        class="btn btn-sm btn-success"
+                        class="btn btn-sm btn-danger"
                         type="submit"
                       >
-                        Edit
+                        Delete
                       </button>
-                    </a>
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-danger"
-                      type="submit"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>

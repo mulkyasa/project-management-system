@@ -3,29 +3,38 @@ const router = express.Router();
 const helpers = require("../helpers/util");
 
 module.exports = db => {
+  /* project page (main page) */
+  // main page, filter and pagination data
   router.get("/", helpers.isLoggedIn, (req, res, next) => {
     let sqlProjects = `SELECT COUNT(ID) AS TOTAL FROM (SELECT DISTINCT projects.projectid as id FROM projects
       LEFT JOIN members ON members.projectid = projects.projectid
       LEFT JOIN users ON users.userid = members.userid`;
-      const page = req.query.page || 1;
-      const limit = 3;
-      const offset = (page - 1) * limit;
-      const link = req.url == "/" ? "/?page=1" : req.url;
-    const { checkId, inputId, checkName, inputName, checkMember, inputMember } = req.query;
+    const page = req.query.page || 1;
+    const limit = 3;
+    const offset = (page - 1) * limit;
+    const link = req.url == "/" ? "/?page=1" : req.url;
+    const {
+      checkId,
+      inputId,
+      checkName,
+      inputName,
+      checkMember,
+      inputMember
+    } = req.query;
     let result = [];
 
     if (checkId && inputId) {
       result.push(`projects.projectid = ${inputId}`);
-    };
+    }
     if (checkName && inputName) {
       result.push(`projects.name ILIKE '%${inputName}%'`);
-    };
+    }
     if (checkMember && inputMember) {
       result.push(`members.userid = ${inputMember}`);
-    };
+    }
     if (result.length > 0) {
       sqlProjects += ` WHERE ${result.join(" AND ")}`;
-    };
+    }
 
     sqlProjects += `) AS total`;
     db.query(sqlProjects, (err, dataProjects) => {
@@ -36,10 +45,10 @@ module.exports = db => {
       let sqlProjects = `SELECT DISTINCT projects.projectid, projects.name, STRING_AGG(users.firstname || ' ' || users.lastname, ', ') as membersname FROM projects
       JOIN members ON members.projectid = projects.projectid
       JOIN users ON members.userid = users.userid`;
-      
+
       if (result.length > 0) {
         sqlProjects += ` WHERE ${result.join(" AND ")}`;
-      };
+      }
 
       sqlProjects += ` GROUP BY projects.projectid ORDER BY projectid ASC LIMIT ${limit} OFFSET ${offset}`;
 
@@ -66,6 +75,7 @@ module.exports = db => {
     });
   });
 
+  // landing page to add project data
   router.get("/add", helpers.isLoggedIn, (req, res, next) => {
     let sql = `SELECT * FROM users ORDER BY userid`;
     db.query(sql, (err, data) => {
@@ -76,11 +86,13 @@ module.exports = db => {
       res.render("projects/add", {
         title: "Add Project",
         url: "projects",
+        projectsMessage: req.flash("projectsMessage"),
         result
       });
     });
   });
 
+  // to post/add project data
   router.post("/add", helpers.isLoggedIn, (req, res, next) => {
     const { name, member } = req.body;
     if (name && member) {
@@ -112,11 +124,12 @@ module.exports = db => {
         });
       });
     } else {
-      req.flash("projectsMessage", "Please add project name and members!");
+      req.flash("projectsMessage", "Please add project name and member!");
       res.redirect("/projects/add");
     }
   });
 
+  // landing page to edit project data
   router.get("/edit/:id", helpers.isLoggedIn, (req, res, next) => {
     const id = [req.params.id];
 
@@ -134,43 +147,52 @@ module.exports = db => {
           url: "projects",
           projects: dataProjects.rows,
           members: dataProjects.rows.map(members => members.userid),
+          projectsMessage: req.flash("projectsMessage"),
           users: dataUsers.rows
         });
       });
     });
   });
 
+  // to post edited project data
   router.post("/edit/:id", helpers.isLoggedIn, (req, res, next) => {
     const { name, member } = req.body;
     const { id } = req.params;
     let sqlEdit = `UPDATE projects SET name = '${name}' WHERE projectid = ${id}`;
-    db.query(sqlEdit, err => {
-      if (err) res.status(500).json(err);
 
-      let sqlDelMember = `DELETE FROM members WHERE projectid = $1`;
-      db.query(sqlDelMember, [id], err => {
+    if (member && name) {
+      db.query(sqlEdit, err => {
         if (err) res.status(500).json(err);
 
-        let temp = [];
-        if (typeof member == "string") {
-          temp.push(`(${member}, ${id})`);
-        } else {
-          for (let i = 0; i < member.length; i++) {
-            temp.push(`(${member[i]}, ${id})`);
-          }
-        }
-        let sqlUpdate = `INSERT INTO members(userid, role, projectid) VALUES ${temp.join(
-          ","
-        )}`;
-        db.query(sqlUpdate, err => {
+        let sqlDelMember = `DELETE FROM members WHERE projectid = $1`;
+        db.query(sqlDelMember, [id], err => {
           if (err) res.status(500).json(err);
 
-          res.redirect(`/projects`);
+          let temp = [];
+          if (typeof member == "string") {
+            temp.push(`(${member}, ${id})`);
+          } else {
+            for (let i = 0; i < member.length; i++) {
+              temp.push(`(${member[i]}, ${id})`);
+            }
+          }
+          let sqlUpdate = `INSERT INTO members(userid, role, projectid) VALUES ${temp.join(
+            ","
+          )}`;
+          db.query(sqlUpdate, err => {
+            if (err) res.status(500).json(err);
+
+            res.redirect(`/projects`);
+          });
         });
       });
-    });
+    } else {
+      req.flash("projectsMessage", "Project name and member can't be empty!");
+      res.redirect("/projects/edit/:id");
+    }
   });
 
+  // to delete project data
   router.get("/delete/:id", (req, res, next) => {
     let deleteProject = "DELETE FROM members WHERE projectid = $1";
     const id = [req.params.id];
@@ -186,75 +208,146 @@ module.exports = db => {
     });
   });
 
-  router.get("/overview", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/overview", {
-      title: "Overview",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "overview"
+  // project overview page
+  router.get("/overview/:projectid", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+    db.query(sqlData, [projectid], (err, data) => {
+      if (err) res.status(500).json(err);
+      res.render("projects/overview", {
+        title: "Overview",
+        user: req.session.user,
+        url: "projects",
+        subUrl: "overview",
+        result: data.rows[0]
+      });
     });
   });
 
-  router.get("/activity", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/activity", {
-      title: "Activity",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "activity"
+  // project activity page
+  router.get("/activity/:projectid", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+    db.query(sqlData, [projectid], (err, data) => {
+      if (err) res.status(500).json(err);
+      res.render("projects/activity", {
+        title: "Activity",
+        user: req.session.user,
+        url: "projects",
+        subUrl: "activity",
+        result: data.rows[0]
+      });
     });
   });
 
-  router.get("/members", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/members/list", {
-      title: "Members",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "members"
+  // project members page
+  router.get("/members/:projectid", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    console.log(req.params);
+    let sqlMembers = `SELECT projects.projectid, members.id, members.role, CONCAT (users.firstname,' ',users.lastname) AS fullname FROM members
+    LEFT JOIN projects ON projects.projectid = members.projectid
+    LEFT JOIN users ON users.userid = members.userid WHERE members.projectid = $1 ORDER BY members.id`;
+
+    db.query(sqlMembers, [projectid], (err, membersData) => {
+      if (err) res.status(500).json(err);
+      let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+      db.query(sqlData, [projectid], (err, data) => {
+        res.render("projects/members/list", {
+          title: "Members",
+          user: req.session.user,
+          data: membersData.rows,
+          result: data.rows[0],
+          projectid,
+          url: "projects",
+          subUrl: "members"
+        });
+      });
     });
   });
 
-  router.get("/members/add", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/members/add", {
-      title: "Add member",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "members"
+  router.get(
+    "/members/add/:projectid",
+    helpers.isLoggedIn,
+    (req, res, next) => {
+      const { projectid } = req.params;
+      let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+      db.query(sqlData, [projectid], (err, data) => {
+        if (err) res.status(500).json(err);
+        res.render("projects/members/add", {
+          title: "Add member",
+          user: req.session.user,
+          url: "projects",
+          subUrl: "members",
+          result: data.rows[0]
+        });
+      });
+    }
+  );
+
+  router.get("/members/edit/:projectid", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+    db.query(sqlData, [projectid], (err, data) => {
+      if (err) res.status(500).json(err);
+      res.render("projects/members/edit", {
+        title: "Edit member",
+        user: req.session.user,
+        url: "projects",
+        subUrl: "members",
+        result: data.rows[0]
+      });
     });
   });
 
-  router.get("/members/edit", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/members/edit", {
-      title: "Edit member",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "members"
+  router.get("/issues/:projectid", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+    db.query(sqlData, [projectid], (err, data) => {
+      if (err) res.status(500).json(err);
+      res.render("projects/issues/list", {
+        title: "Issues",
+        user: req.session.user,
+        url: "projects",
+        subUrl: "issues",
+        result: data.rows[0]
+      });
     });
   });
 
-  router.get("/issues", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/issues/list", {
-      title: "Issues",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "issues"
+  router.get("/issues/add/:projectid", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+    db.query(sqlData, [projectid], (err, data) => {
+      if (err) res.status(500).json(err);
+      res.render("projects/issues/add", {
+        title: "Add issue",
+        user: req.session.user,
+        url: "projects",
+        subUrl: "issues",
+        result: data.rows[0]
+      });
     });
   });
 
-  router.get("/issues/add", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/issues/add", {
-      title: "Add issue",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "issues"
-    });
-  });
+  router.get("/issues/edit/:projectid", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
 
-  router.get("/issues/edit", helpers.isLoggedIn, (req, res, next) => {
-    res.render("projects/issues/edit", {
-      title: "Edit issue",
-      user: req.session.user,
-      url: "projects",
-      subUrl: "issues"
+    db.query(sqlData, [projectid], (err, data) => {
+      if (err) res.status(500).json(err);
+      res.render("projects/issues/edit", {
+        title: "Edit issue",
+        user: req.session.user,
+        url: "projects",
+        subUrl: "issues"
+      });
     });
   });
 
