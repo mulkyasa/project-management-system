@@ -360,9 +360,9 @@ module.exports = db => {
       const {projectid, memberid} = req.params;
 
       let sqlDelete = `DELETE FROM members WHERE projectid = $1 AND id = $2`
-      pool.query(sqlDelete, [projectid, memberid], err => {
+      db.query(sqlDelete, [projectid, memberid], err => {
         if (err) res.status(500).json(err)
-        res.redirect(`/project/member/${projectid}`)
+        res.redirect(`/projects/members/${projectid}`)
       });
     }
   );

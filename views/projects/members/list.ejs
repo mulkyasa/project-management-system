@@ -168,13 +168,15 @@
                           Edit
                         </button>
                       </a>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-danger"
-                        type="submit"
-                      >
-                        Delete
-                      </button>
+                      <a href="/projects/members/<%= item.projectid %>/delete/<%= item.id %>">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-danger"
+                          type="submit"
+                        >
+                          Delete
+                        </button>
+                      </a>
                     </td>
                   </tr>
                 <% }); %>
