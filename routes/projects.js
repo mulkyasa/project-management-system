@@ -245,7 +245,6 @@ module.exports = db => {
   // project members page
   router.get("/members/:projectid", helpers.isLoggedIn, (req, res, next) => {
     const { projectid } = req.params;
-    console.log(req.params);
     let sqlMembers = `SELECT projects.projectid, members.id, members.role, CONCAT (users.firstname,' ',users.lastname) AS fullname FROM members
     LEFT JOIN projects ON projects.projectid = members.projectid
     LEFT JOIN users ON users.userid = members.userid WHERE members.projectid = $1 ORDER BY members.id`;
@@ -255,6 +254,8 @@ module.exports = db => {
       let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
 
       db.query(sqlData, [projectid], (err, data) => {
+        if (err) res.status(500).json(err);
+
         res.render("projects/members/list", {
           title: "Members",
           user: req.session.user,
@@ -269,7 +270,7 @@ module.exports = db => {
   });
 
   router.get(
-    "/members/add/:projectid",
+    "/members/:projectid/add",
     helpers.isLoggedIn,
     (req, res, next) => {
       const { projectid } = req.params;
