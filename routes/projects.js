@@ -430,7 +430,7 @@ module.exports = db => {
     db.query(sqlData, [projectid], (err, data) => {
       if (err) res.status(500).json(err);
       res.render("projects/issues/add", {
-        title: "Add issue",
+        title: "Add Issue",
         user: req.session.user,
         url: "projects",
         subUrl: "issues",
@@ -440,7 +440,7 @@ module.exports = db => {
   });
 
   router.get(
-    "/issues/edit/:projectid",
+    "/issues/:projectid/edit",
     helpers.isLoggedIn,
     (req, res, next) => {
       const { projectid } = req.params;
@@ -449,10 +449,11 @@ module.exports = db => {
       db.query(sqlData, [projectid], (err, data) => {
         if (err) res.status(500).json(err);
         res.render("projects/issues/edit", {
-          title: "Edit issue",
+          title: "Edit Issue",
           user: req.session.user,
           url: "projects",
-          subUrl: "issues"
+          subUrl: "issues",
+          result: data.rows[0]
         });
       });
     }
