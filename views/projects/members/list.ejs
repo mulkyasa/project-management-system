@@ -17,7 +17,9 @@
       <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
     </div>
     <h1 class="display-4 mb-1"><%= title %></h1>
-    <p class="h5 mb-4 text-secondary">#<%= result.projectid %> <%= result.name %></p>
+    <p class="h5 mb-4 text-secondary">
+      #<%= result.projectid %> <%= result.name %>
+    </p>
     <div class="shadow-sm card">
       <div class="card-body">
         <form method="GET">
@@ -27,14 +29,14 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-id" class="col-form-label">
-                <input type="checkbox" id="filter-id" name="filter-id" /> ID
+                <input type="checkbox" id="filter-id" name="checkId" /> ID
               </label>
             </div>
             <div class="col-sm-11">
               <input
                 type="text"
                 class="form-control"
-                name="filter-id"
+                name="inputId"
                 placeholder="ID"
               />
             </div>
@@ -42,7 +44,7 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-name" class="col-form-label">
-                <input type="checkbox" id="filter-name" name="filter-name" />
+                <input type="checkbox" id="filter-name" name="checkName" />
                 Name
               </label>
             </div>
@@ -50,7 +52,7 @@
               <input
                 type="text"
                 class="form-control"
-                name="filter-name"
+                name="inputName"
                 placeholder="Name"
               />
             </div>
@@ -61,13 +63,13 @@
                 <input
                   type="checkbox"
                   id="filter-position"
-                  name="filter-position"
+                  name="checkPosition"
                 />
                 Position
               </label>
             </div>
             <div class="col-sm-11">
-              <select class="custom-select">
+              <select class="custom-select" name="inputPosition">
                 <option selected disabled>Choose position</option>
                 <option value="Manager">Manager</option>
                 <option value="Quality Assurance">Quality Assurance</option>
@@ -154,31 +156,35 @@
               </thead>
               <tbody>
                 <% data.forEach((item) => { %>
-                  <tr>
-                    <th scope="row"><%= item.id %></th>
-                    <td><%= item.fullname %></td>
-                    <td><%= item.role %></td>
-                    <td>
-                      <a href="/projects/members/<%= item.projectid %>/edit/<%= item.id %>">
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-success"
-                          type="submit"
-                        >
-                          Edit
-                        </button>
-                      </a>
-                      <a href="/projects/members/<%= item.projectid %>/delete/<%= item.id %>">
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-danger"
-                          type="submit"
-                        >
-                          Delete
-                        </button>
-                      </a>
-                    </td>
-                  </tr>
+                <tr>
+                  <th scope="row"><%= item.id %></th>
+                  <td><%= item.fullname %></td>
+                  <td><%= item.role %></td>
+                  <td>
+                    <a
+                      href="/projects/members/<%= item.projectid %>/edit/<%= item.id %>"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        type="submit"
+                      >
+                        Edit
+                      </button>
+                    </a>
+                    <a
+                      href="/projects/members/<%= item.projectid %>/delete/<%= item.id %>"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        type="submit"
+                      >
+                        Delete
+                      </button>
+                    </a>
+                  </td>
+                </tr>
                 <% }); %>
               </tbody>
             </table>
@@ -186,20 +192,29 @@
         </div>
         <nav aria-label="Page navigation">
           <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">Previous</a>
+            <li class="page-item <%= page <= 1 ? 'disabled' : '' %>">
+              <a
+                class="page-link"
+                href="/projects<%= link.replace(`page = ${parseInt(page)}`, `page = ${parseInt(page) - 1}`) %>"
+                >Previous</a
+              >
             </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">1</a>
+            <% for (let i = 1; i <= totalPage; i++) { %>
+            <li class="page-item <%= page == i ? 'active' : '' %>">
+              <a
+                class="page-link"
+                href="/project<%= link.replace(`page=${page}`, `page=${i}`) %>"
+              >
+                <%= i %>
+              </a>
             </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">2</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">3</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">Next</a>
+            <% } %>
+            <li class="page-item <%= page >= 1 ? 'disabled' : '' %>">
+              <a
+                class="page-link"
+                href="/projects<%= link.replace(`page = ${parseInt(page)}`, `page = ${parseInt(page) + 1}`) %>"
+                >Next</a
+              >
             </li>
           </ul>
         </nav>

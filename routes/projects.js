@@ -196,6 +196,7 @@ module.exports = db => {
   router.get("/delete/:id", (req, res, next) => {
     let deleteProject = "DELETE FROM members WHERE projectid = $1";
     const id = [req.params.id];
+
     db.query(deleteProject, id, err => {
       if (err) res.status(500).json(err);
 
@@ -244,26 +245,65 @@ module.exports = db => {
 
   // project members page
   router.get("/members/:projectid", helpers.isLoggedIn, (req, res, next) => {
-    const { projectid } = req.params;
-    let sqlMembers = `SELECT projects.projectid, members.id, members.role, CONCAT (users.firstname,' ',users.lastname) AS fullname FROM members
-    LEFT JOIN projects ON projects.projectid = members.projectid
-    LEFT JOIN users ON users.userid = members.userid WHERE members.projectid = $1 ORDER BY members.id`;
+    const {projectid} = req.params;
+    const link = (req.url == `/member/${projectid}`) ? `/member/${projectid}/?page=1` : req.url;
+    let page = req.query.page || 1;
+    let limit = 3;
+    let offset = (page - 1) * limit
+    const {checkId, inputId, checkName, inputName, checkPosition, inputPosition} = req.body;
+    let filter = [];
 
-    db.query(sqlMembers, [projectid], (err, membersData) => {
+    if (checkId && inputId) {
+      filter.push(`members.id = ${inputId}`)
+    };
+    if (checkName && inputName) {
+      filter.push(`CONCAT (users.firstname, ' ', users.lastname) ILIKE '%${inputName}%'`)
+    };
+    if (checkPosition && inputPosition) {
+      filter.push(`members.role = ${inputPosition}`)
+    };
+
+    let sql = `SELECT COUNT (member) AS total  FROM (SELECT members.userid FROM members
+      JOIN users ON members.userid = users.userid WHERE members.projectid = ${projectid}`;
+
+      if (filter.length > 0) {
+        sql += ` AND ${filter.join(' AND ')}`;
+      };
+      sql += `) AS member`;
+
+    db.query(sql, (err, count) => {
       if (err) res.status(500).json(err);
-      let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
 
-      db.query(sqlData, [projectid], (err, data) => {
+      const total = count.rows[0].total;
+      const pages = Math.ceil(total / limit);
+      let sqlMembers = `SELECT projects.projectid, members.id, members.role, CONCAT (users.firstname,' ',users.lastname) AS fullname FROM members
+      LEFT JOIN projects ON projects.projectid = members.projectid
+      LEFT JOIN users ON users.userid = members.userid WHERE members.projectid = $1`;
+
+      if (filter.length > 0) {
+        sql += ` AND ${filter.join(' AND ')}`;
+      };
+      sql +=  ` ORDER BY members.id LIMIT ${limit} OFFSET ${offset}`
+
+      db.query(sqlMembers, [projectid], (err, membersData) => {
         if (err) res.status(500).json(err);
+        let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
 
-        res.render("projects/members/list", {
-          title: "Members",
-          user: req.session.user,
-          data: membersData.rows,
-          result: data.rows[0],
-          projectid,
-          url: "projects",
-          subUrl: "members"
+        db.query(sqlData, [projectid], (err, data) => {
+          if (err) res.status(500).json(err);
+
+          res.render("projects/members/list", {
+            title: "Members",
+            user: req.session.user,
+            data: membersData.rows,
+            result: data.rows[0],
+            projectid,
+            url: "projects",
+            subUrl: "members",
+            page,
+            totalPage: pages,
+            link
+          });
         });
       });
     });
@@ -383,7 +423,7 @@ module.exports = db => {
     });
   });
 
-  router.get("/issues/add/:projectid", helpers.isLoggedIn, (req, res, next) => {
+  router.get("/issues/:projectid/add", helpers.isLoggedIn, (req, res, next) => {
     const { projectid } = req.params;
     let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
 

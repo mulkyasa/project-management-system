@@ -1,12 +1,11 @@
 <%- include('../partials/_navbar.ejs') %>
-
 <main role="main" class="flex-shrink-0">
   <div class="container">
     <h1 class="display-4 mb-4"><%= title %></h1>
     <div class="shadow-sm card">
       <div class="card-body">
         <form method="POST">
-          <h3 class="h3 mb-3">Filters</h3>
+          <h3 class="h3 mb-3">Forms</h3>
           <hr />
           <% if(projectsMessage.length > 0) { %>
             <div class="alert alert-danger" role="alert">
@@ -52,5 +51,4 @@
     </div>
   </div>
 </main>
-
 <%- include('../partials/_footer.ejs') %>
