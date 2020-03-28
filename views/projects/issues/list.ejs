@@ -361,7 +361,7 @@
                   <th scope="col-sm">Description</th>
                   <th scope="col-sm">Status</th>
                   <th scope="col-sm">Priority</th>
-                  <th scope="col-sm">Asignee</th>
+                  <th scope="col-sm">Assignee</th>
                   <th scope="col-sm">Start date</th>
                   <th scope="col-sm">Due date</th>
                   <th scope="col-sm">Estimated</th>
@@ -378,45 +378,47 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <a href="/projects/issues/<%= result.projectid %>/edit">
+                <% issuesResult.forEach((item) => { %>
+                  <tr>
+                    <th scope="row"><%= item.issueid %></th>
+                    <td><%= item.tracker %></td>
+                    <td><%= item.subject %></td>
+                    <td><%= item.description %></td>
+                    <td><%= item.status %></td>
+                    <td><%= item.priority %></td>
+                    <td><%= item.fullname %></td>
+                    <td><%= item.startdate %></td>
+                    <td><%= item.duedate %></td>
+                    <td><%= item.estimatedtime %> hours</td>
+                    <td><%= item.done %>%</td>
+                    <td><%= item.author %></td>
+                    <td><%= item.spenttime %></td>
+                    <td><%= item.file %></td>
+                    <td><%= item.targetversion %></td>
+                    <td><%= item.createddate %></td>
+                    <td><%= item.updateddate %></td>
+                    <td><%= item.closeddate %></td>
+                    <td><%= item.parenttask %></td>
+                    <td>
+                      <a href="/projects/issues/<%= result.projectid %>/edit/<%= item.issueid %>">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-success btn-block mb-2"
+                          type="submit"
+                        >
+                          Edit
+                        </button>
+                      </a>
                       <button
                         type="button"
-                        class="btn btn-sm btn-success btn-block mb-2"
+                        class="btn btn-sm btn-danger btn-block"
                         type="submit"
                       >
-                        Edit
+                        Delete
                       </button>
-                    </a>
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-danger btn-block"
-                      type="submit"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>

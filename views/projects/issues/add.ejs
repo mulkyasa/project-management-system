@@ -88,10 +88,10 @@
                 id="description"
                 class="form-control"
                 name="description"
-                placeholder="Description"
                 rows="3"
-              >
-              </textarea>
+                placeholder="Description"
+                required
+              ></textarea>
             </div>
           </div>
           <fieldset class="form-group">
@@ -105,6 +105,7 @@
                     id="new"
                     name="status"
                     value="New"
+                    checked
                   />
                   <label class="form-check-label" for="new">
                     New
@@ -117,6 +118,7 @@
                     id="in-progress"
                     name="status"
                     value="In Progress"
+                    disabled
                   />
                   <label class="form-check-label" for="in-progress">
                     In Progress
@@ -129,6 +131,7 @@
                     id="feedback"
                     name="status"
                     value="Feedback"
+                    disabled
                   />
                   <label class="form-check-label" for="feedback">
                     Feedback
@@ -141,6 +144,7 @@
                     id="resolved"
                     name="status"
                     value="Resolved"
+                    disabled
                   />
                   <label class="form-check-label" for="resolved">
                     Resolved
@@ -153,6 +157,7 @@
                     id="closed"
                     name="status"
                     value="Closed"
+                    disabled
                   />
                   <label class="form-check-label" for="closed">
                     Closed
@@ -165,6 +170,7 @@
                     id="rejected"
                     name="status"
                     value="Rejected"
+                    disabled
                   />
                   <label class="form-check-label" for="rejected">
                     Rejected
@@ -230,10 +236,10 @@
           </fieldset>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Asignee</label>
+              <label for="" class="col-form-label">Assignee</label>
             </div>
             <div class="col-sm-10">
-              <select class="custom-select" name="member">
+              <select class="custom-select" name="assignee">
                 <option selected disabled>Choose member</option>
                 <% usersData.forEach((item) => { %>
                   <option value="<%= item.userid %>"><%= item.fullname %></option>
@@ -290,6 +296,7 @@
             <div class="col-sm-10">
               <select class="custom-select" name="done">
                 <option selected disabled>Choose percentage</option>
+                <option value="0">0%</option>
                 <option value="10">10%</option>
                 <option value="20">20%</option>
                 <option value="30">30%</option>

@@ -30,11 +30,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="bug"
                     name="tracker"
                     value="Bug"
+                    <%= result.tracker == 'Bug' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="bug">
                     Bug
                   </label>
                 </div>
@@ -42,11 +43,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="feature"
                     name="tracker"
                     value="Feature"
+                    <%= result.tracker == 'Feature' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="feature">
                     Feature
                   </label>
                 </div>
@@ -54,11 +56,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="support"
                     name="tracker"
                     value="Support"
+                    <%= result.tracker == 'Support' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="support">
                     Support
                   </label>
                 </div>
@@ -67,31 +70,32 @@
           </fieldset>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Subject</label>
+              <label for="subject" class="col-form-label">Subject</label>
             </div>
             <div class="col-sm-10">
               <input
                 type="text"
-                id=""
+                id="subject"
                 class="form-control"
-                name=""
+                name="subject"
                 placeholder="Subject issue"
+                value="<%= result.subject %>"
               />
             </div>
           </div>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Description</label>
+              <label for="description" class="col-form-label">Description</label>
             </div>
             <div class="col-sm-10">
               <textarea
-                id=""
+                id="description"
                 class="form-control"
-                name=""
-                placeholder="Description"
+                name="description"
                 rows="3"
-              >
-              </textarea>
+                placeholder="Description"
+                required
+              ><%= result.description %></textarea>
             </div>
           </div>
           <fieldset class="form-group">
@@ -102,11 +106,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="new"
                     name="status"
                     value="New"
+                    <%= result.status == 'New' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="new">
                     New
                   </label>
                 </div>
@@ -114,11 +119,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="in-progress"
                     name="status"
                     value="In Progress"
+                    <%= result.status == 'In Progress' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="in-progress">
                     In Progress
                   </label>
                 </div>
@@ -126,11 +132,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="feedback"
                     name="status"
                     value="Feedback"
+                    <%= result.status == 'Feedback' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="feedback">
                     Feedback
                   </label>
                 </div>
@@ -138,11 +145,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="resolved"
                     name="status"
                     value="Resolved"
+                    <%= result.status == 'Resolved' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="resolved">
                     Resolved
                   </label>
                 </div>
@@ -150,11 +158,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="closed"
                     name="status"
                     value="Closed"
+                    <%= result.status == 'Closed' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="closed">
                     Closed
                   </label>
                 </div>
@@ -162,11 +171,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="rejected"
                     name="status"
                     value="Rejected"
+                    <%= result.status == 'Rejected' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="rejected">
                     Rejected
                   </label>
                 </div>
@@ -181,11 +191,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="normal"
                     name="priority"
                     value="Normal"
+                    <%= result.priority == 'Normal' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="normal">
                     Normal
                   </label>
                 </div>
@@ -193,11 +204,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="high"
                     name="priority"
                     value="High"
+                    <%= result.priority == 'High' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="high">
                     High
                   </label>
                 </div>
@@ -205,11 +217,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="urgent"
                     name="priority"
                     value="Urgent"
+                    <%= result.priority == 'Urgent' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="urgent">
                     Urgent
                   </label>
                 </div>
@@ -217,11 +230,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    id=""
+                    id="immadiate"
                     name="priority"
                     value="Immadiate"
+                    <%= result.priority == 'Immadiate' ? 'checked' : '' %>
                   />
-                  <label class="form-check-label" for="">
+                  <label class="form-check-label" for="immadiate">
                     Immadiate
                   </label>
                 </div>
@@ -230,54 +244,59 @@
           </fieldset>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Asignee</label>
+              <label for="" class="col-form-label">Assignee</label>
             </div>
             <div class="col-sm-10">
-              <select class="custom-select" name="member">
+              <select class="custom-select" name="assignee">
                 <option selected disabled>Choose member</option>
-                  <option value="1">1</option>
+                <% resultMembers.forEach((item) => { %>
+                  <option value="<%= item.userid %>" <%= item.userid == result.assignee ? 'selected' : ''%>><%= item.fullname %></option>
+                <% }); %>
               </select>
             </div>
           </div>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Start date</label>
+              <label for="start-date" class="col-form-label">Start date</label>
             </div>
             <div class="col-sm-10">
               <input
                 type="date"
-                id=""
+                id="start-date"
                 class="form-control"
-                name=""
-                placeholder=""
+                name="startdate"
+                value="<%= moment(result.startdate).format('YYYY-MM-DD') %>"
+                disabled
               />
             </div>
           </div>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Due date</label>
+              <label for="due-date" class="col-form-label">Due date</label>
             </div>
             <div class="col-sm-10">
               <input
                 type="date"
-                id=""
+                id="due-date"
                 class="form-control"
-                name=""
-                placeholder=""
+                name="duedate"
+                value="<%= moment(result.duedate).format('YYYY-MM-DD') %>"
               />
             </div>
           </div>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Estimated time (hours)</label>
+              <label for="estimated-time" class="col-form-label">Estimated time (hours)</label>
             </div>
             <div class="col-sm-10">
               <input
                 type="number"
-                id=""
+                id="estimated-time"
                 class="form-control"
-                name=""
+                name="estimatedtime"
                 placeholder="Estimated time"
+                value="<%= result.estimatedtime %>"
+                disabled
               />
             </div>
           </div>
@@ -286,36 +305,87 @@
               <label for="" class="col-form-label">Done (%)</label>
             </div>
             <div class="col-sm-10">
-              <select class="custom-select" name="member">
+              <select class="custom-select" name="done">
                 <option selected disabled>Choose percentage</option>
-                <option value="10">10%</option>
-                <option value="20">20%</option>
-                <option value="30">30%</option>
-                <option value="40">40%</option>
-                <option value="50">50%</option>
-                <option value="60">60%</option>
-                <option value="70">70%</option>
-                <option value="80">80%</option>
-                <option value="90">90%</option>
-                <option value="100">100%</option>
+                <option value="0" <%= result.done == 0 ? 'selected' : '' %>>0%</option>
+                <option value="10" <%= result.done == 10 ? 'selected' : '' %></option>>10%</option>
+                <option value="20" <%= result.done == 20 ? 'selected' : '' %></option>>20%</option>
+                <option value="30" <%= result.done == 30 ? 'selected' : '' %></option>>30%</option>
+                <option value="40" <%= result.done == 40 ? 'selected' : '' %></option>>40%</option>
+                <option value="50" <%= result.done == 50 ? 'selected' : '' %></option>>50%</option>
+                <option value="60" <%= result.done == 60 ? 'selected' : '' %></option>>60%</option>
+                <option value="70" <%= result.done == 70 ? 'selected' : '' %></option>>70%</option>
+                <option value="80" <%= result.done == 80 ? 'selected' : '' %></option>>80%</option>
+                <option value="90" <%= result.done == 90 ? 'selected' : '' %></option>>90%</option>
+                <option value="100" <%= result.done == 100 ? 'selected' : '' %></option>>100%</option>
               </select>
             </div>
           </div>
           <div class="form-group row">
             <div class="col-sm">
-              <label for="" class="col-form-label">Upload file</label>
+              <label for="upload-file" class="col-form-label">Upload file</label>
             </div>
             <div class="col-sm-10">
               <input
                 type="file"
-                id=""
+                id="upload-file"
                 class="form-control-file"
-                name=""
+                name="file"
                 placeholder="No file choosen"
               />
             </div>
           </div>
-          <button class="btn btn-sm btn-dark mt-2" type="submit">Add data</button>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="spent-time" class="col-form-label">Spent time (hours)</label>
+            </div>
+            <div class="col-sm-10">
+              <input
+                type="number"
+                id="spent-time"
+                class="form-control"
+                name="spenttime"
+                placeholder="Spent time"
+                value="<%= result.spenttime %>"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="target-version" class="col-form-label">Target version</label>
+            </div>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                id="target-version"
+                class="form-control"
+                name="targetversion"
+                placeholder="Target version ex: v1.0"
+                value="<%= result.targetversion %>"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm">
+              <label for="parent-task" class="col-form-label">Parent task</label>
+            </div>
+            <div class="col-sm-10">
+              <select id="parent-task" class="custom-select" name="parenttask">
+                <option selected disabled>Choose parent task</option>
+                <% tasks.forEach((item) => { %>
+                  <option
+                  value="<%= item.issueid %>"
+                  <%= result.parenttask == item.issueid ? 'selected' : '' %>
+                  >
+                    <%= item.subject %> (<%= item.tracker %>)
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-dark mt-2" type="submit">Save data</button>
         </form>
       </div>
     </div>
