@@ -429,12 +429,46 @@ module.exports = db => {
 
     db.query(sqlData, [projectid], (err, data) => {
       if (err) res.status(500).json(err);
-      res.render("projects/issues/add", {
-        title: "Add Issue",
-        user: req.session.user,
-        url: "projects",
-        subUrl: "issues",
-        result: data.rows[0]
+
+      let sqlUsers = `SELECT userid, CONCAT(firstname,' ',lastname) AS fullname FROM users
+      WHERE userid IN (SELECT users.userid FROM members INNER JOIN users ON users.userid = members.userid WHERE members.projectid = $1)`;
+
+      db.query(sqlUsers, [projectid], (err, usersData) => {
+        if (err) res.status(500).json(err);
+
+        res.render("projects/issues/add", {
+          title: "Add Issue",
+          user: req.session.user,
+          url: "projects",
+          subUrl: "issues",
+          result: data.rows[0],
+          usersData: usersData.rows
+        });
+      });
+    });
+  });
+
+  router.post("/issues/:projectid/add", helpers.isLoggedIn, (req, res, next) => {
+    const { projectid } = req.params;
+    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+
+    db.query(sqlData, [projectid], (err, data) => {
+      if (err) res.status(500).json(err);
+
+      let sqlUsers = `SELECT userid, CONCAT(firstname,' ',lastname) AS fullname FROM users
+      WHERE userid IN (SELECT users.userid FROM members INNER JOIN users ON users.userid = members.userid WHERE members.projectid = $1)`;
+
+      db.query(sqlUsers, [projectid], (err, usersData) => {
+        if (err) res.status(500).json(err);
+
+        res.render("projects/issues/add", {
+          title: "Add Issue",
+          user: req.session.user,
+          url: "projects",
+          subUrl: "issues",
+          result: data.rows[0],
+          usersData: usersData.rows
+        });
       });
     });
   });
