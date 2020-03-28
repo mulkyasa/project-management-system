@@ -590,5 +590,84 @@ module.exports = db => {
     }
   );
 
+  router.post("/issues/:projectid/edit/:issueid", helpers.isLoggedIn, (req, res, next) => {
+    const {projectid, issueid} = req.params;
+    const userid = req.session.user.userid;
+    const {
+      tracker,
+      subject,
+      description,
+      status,
+      priority,
+      assignee,
+      duedate,
+      done,
+      file,
+      spenttime,
+      targetversion,
+      parenttask
+    } = req.body;
+    let sqlIssues = `UPDATE issues SET
+    tracker = $1,
+    subject = $2,
+    description = $3,
+    status = $4,
+    priority = $5,
+    assignee = $6,
+    duedate = $7,
+    done = $8,
+    files = $9,
+    spenttime = $10,
+    targetversion = $11,
+    author = $12,
+    updateddate = NOW(),
+    parenttask = $13
+    WHERE issueid = $14`;
+    let issueData = [
+      tracker,
+      subject,
+      description,
+      status,
+      priority,
+      assignee,
+      duedate,
+      done,
+      file,
+      spenttime,
+      targetversion,
+      userid,
+      parenttask,
+      issueid
+    ];
+    if (req.files) {
+      let file = req.files.images;
+      let fileName = file.name.toLowerCase().replace('', Date.now().split(' ').join('-'));
+      file.mv(path.join(__dirname, '..', 'public', 'upload', fileName), (err) => {
+        if (err) res.status(500).json(err);
+        issueData[9] = `/upload/${fileName}`;
+        db.query(sqlIssues, issueData, (err) => {
+          if (err) res.status(500).json(err);
+          const recordActivity = `INSERT INTO activity (projectid, time, title, description, author)
+          VALUES ($1, NOW(), $2, $3, $4, $5)`;
+          const activityData = [projectid, subject, description, userid];
+          db.query(recordActivity, activityData, (err) => {
+            if (err) res.status(500).json(err);
+            res.redirect(`/projects/issues/${projectid}`);
+          });
+        });
+      });
+    } else {
+      db.query(sqlIssues, issueData, (err) => {
+        const recordActivity = `INSERT INTO activity (projectid, time, title, description, author)
+        VALUES ($1, NOW(), $2, $3, $4)`;
+        const activityData = [projectid, subject, description, userid];
+        db.query(recordActivity, activityData, (err) => {
+          if (err) res.status(500).json(err);
+          res.redirect(`/projects/issues/${projectid}`);
+        });
+      });
+    };
+  });
+
   return router;
 };
