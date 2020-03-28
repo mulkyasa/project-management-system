@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const helpers = require("../helpers/util");
+const path = require ('path');
+const moment = require('moment');
 
 module.exports = db => {
   /* project page (main page) */
@@ -441,6 +443,7 @@ module.exports = db => {
           user: req.session.user,
           url: "projects",
           subUrl: "issues",
+          projectid,
           result: data.rows[0],
           usersData: usersData.rows
         });
@@ -455,20 +458,67 @@ module.exports = db => {
     db.query(sqlData, [projectid], (err, data) => {
       if (err) res.status(500).json(err);
 
-      let sqlUsers = `SELECT userid, CONCAT(firstname,' ',lastname) AS fullname FROM users
-      WHERE userid IN (SELECT users.userid FROM members INNER JOIN users ON users.userid = members.userid WHERE members.projectid = $1)`;
+      const authorId = req.session.user.userid;
+      const {
+        tracker,
+        subject,
+        description,
+        status,
+        priority,
+        asignee,
+        startdate,
+        duedate,
+        estimatedtime,
+        done,
+        file
+      } = req.body;
+      let sqlIssue = `INSERT INTO issues (projectid, tracker, subject, description, status, priority, asignee, startdate, duedate, estimatedtime, done, files, author, createddate)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW())`;
+      const issueData = [
+        projectid,
+        tracker,
+        subject,
+        description,
+        status,
+        priority,
+        asignee,
+        startdate,
+        duedate,
+        estimatedtime,
+        done,
+        file,
+        authorid
+      ];
 
-      db.query(sqlUsers, [projectid], (err, usersData) => {
-        if (err) res.status(500).json(err);
+      if (req.files) {
+        let file = req.files.images;
+        let fileName = file.name.toLowerCase().replace('', Date.now()).split(' ').join('-');
 
-        res.render("projects/issues/add", {
-          title: "Add Issue",
-          user: req.session.user,
-          url: "projects",
-          subUrl: "issues",
-          result: data.rows[0],
-          usersData: usersData.rows
+        file.mv(path.join(__dirname, '..', 'public', 'upload', fileName), (err) => {
+          if (err) res.status(500).json(err);
+
+          issueData[11] = `/upload/${fileName}`;
+          db.query(sqlIssue, issueData, (err) => {
+            if (err) res.status(500).json(err);
+
+            res.redirect(`/projects/issues/${projectid}/add`);
+          });
         });
+      } else {
+        db.query(sqlIssue, issueData, (err) => {
+          if (err) res.status(500).json(err);
+
+          res.redirect(`/projects/issues/${projectid}/add`);
+        });
+      };
+
+      res.render("projects/issues/add", {
+        title: "Add Issue",
+        user: req.session.user,
+        url: "projects",
+        subUrl: "issues",
+        result: data.rows[0],
+        usersData: usersData.rows
       });
     });
   });
