@@ -77,12 +77,14 @@
               </select>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-dark" type="submit">
+          <button class="btn btn-sm btn-dark" type="submit">
             Search
           </button>
-          <button type="button" class="btn btn-sm btn-default" type="submit">
-            Reset
-          </button>
+          <a href="/projects/members/<%= result.projectid %>">
+            <button class="btn btn-sm btn-default" type="button">
+              Reset
+            </button>
+          </a>
         </form>
       </div>
     </div>
@@ -176,6 +178,7 @@
                       href="/projects/members/<%= item.projectid %>/delete/<%= item.id %>"
                     >
                       <button
+                        onclick="return confirm('Are you sure you want to delete this item?');"
                         type="button"
                         class="btn btn-sm btn-danger"
                         type="submit"
@@ -195,7 +198,7 @@
             <li class="page-item <%= page <= 1 ? 'disabled' : '' %>">
               <a
                 class="page-link"
-                href="/projects<%= link.replace(`page = ${parseInt(page)}`, `page = ${parseInt(page) - 1}`) %>"
+                href="/projects<%= link.replace(`page=${parseInt(page)}`, `page=${parseInt(page) - 1}`) %>"
                 >Previous</a
               >
             </li>
@@ -209,10 +212,10 @@
               </a>
             </li>
             <% } %>
-            <li class="page-item <%= page >= 1 ? 'disabled' : '' %>">
+            <li class="page-item <%= page >= totalPage ? 'disabled' : '' %>">
               <a
                 class="page-link"
-                href="/projects<%= link.replace(`page = ${parseInt(page)}`, `page = ${parseInt(page) + 1}`) %>"
+                href="/projects<%= link.replace(`page=${parseInt(page)}`, `page=${parseInt(page) + 1}`) %>"
                 >Next</a
               >
             </li>

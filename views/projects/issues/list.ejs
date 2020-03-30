@@ -21,19 +21,20 @@
     <div class="shadow-sm card">
       <div class="card-body">
         <form action="">
+          <input type="hidden" id="page" name="page" value="1" />
           <h3 class="h3 mb-3">Filters</h3>
           <hr />
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-id" class="col-form-label">
-                <input type="checkbox" id="filter-id" name="filter-id" /> ID
+                <input type="checkbox" id="filter-id" name="checkId" /> ID
               </label>
             </div>
             <div class="col-sm-11">
               <input
                 type="text"
                 class="form-control"
-                name="filter-id"
+                name="inputId"
                 placeholder="ID"
               />
             </div>
@@ -44,7 +45,7 @@
                 <input
                   type="checkbox"
                   id="filter-subject"
-                  name="filter-subject"
+                  name="checkSubject"
                 />
                 Subject
               </label>
@@ -53,7 +54,7 @@
               <input
                 type="text"
                 class="form-control"
-                name="filter-subject"
+                name="inputSubject"
                 placeholder="Subject"
               />
             </div>
@@ -61,12 +62,12 @@
           <div class="form-group row">
             <div class="col-sm">
               <label for="filter-issue" class="col-form-label">
-                <input type="checkbox" id="filter-issue" name="filter-issue" />
-                Issue
+                <input type="checkbox" id="filter-issue" name="checkTracker" />
+                Tracker
               </label>
             </div>
             <div class="col-sm-11">
-              <select class="custom-select">
+              <select class="custom-select" name="inputTracker">
                 <option selected>Choose issue tracker</option>
                 <option value="Bug">Bug</option>
                 <option value="Feature">Feature</option>
@@ -74,12 +75,14 @@
               </select>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-dark" type="submit">
+          <button class="btn btn-sm btn-dark" type="submit">
             Search
           </button>
-          <button type="button" class="btn btn-sm btn-default" type="submit">
-            Reset
-          </button>
+          <a href="/projects/issues/<%= result.projectid %>"></a>
+            <button class="btn btn-sm btn-default" type="submit">
+              Reset
+            </button>
+
         </form>
       </div>
     </div>
@@ -364,7 +367,7 @@
                   <th scope="col-sm">Assignee</th>
                   <th scope="col-sm">Start date</th>
                   <th scope="col-sm">Due date</th>
-                  <th scope="col-sm">Estimated</th>
+                  <th scope="col-sm">Estimated time</th>
                   <th scope="col-sm">Done</th>
                   <th scope="col-sm">Author</th>
                   <th scope="col-sm">Spent time</th>
@@ -396,7 +399,7 @@
                     <td><%= item.file %></td>
                     <td><%= item.targetversion %></td>
                     <td><%= item.createddate %></td>
-                    <td><%= item.updateddate %></td>
+                    <td><%= moment(item.updateddate).format('LL') %></td>
                     <td><%= item.closeddate %></td>
                     <td><%= item.parenttask %></td>
                     <td>
@@ -409,13 +412,16 @@
                           Edit
                         </button>
                       </a>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-danger btn-block"
-                        type="submit"
-                      >
-                        Delete
-                      </button>
+                      <a href="/projects/issues/<%= result.projectid %>/delete/<%= item.issueid %>">
+                        <button
+                          onclick="return confirm('Are you sure you want to delete this item?');"
+                          type="button"
+                          class="btn btn-sm btn-danger btn-block"
+                          type="submit"
+                        >
+                          Delete
+                        </button>
+                      </a>
                     </td>
                   </tr>
                 <% }); %>
@@ -425,20 +431,16 @@
         </div>
         <nav aria-label="Page navigation">
           <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">Previous</a>
+            <li class="page-item <%= page <= 1 ? 'disabled' : '' %>">
+              <a class="page-link" href="/projects<%= link.replace(`page=${parseInt(page)}`, `page=${parseInt(page) - 1}`) %>">Previous</a>
             </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">1</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">2</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">3</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#">Next</a>
+            <% for (let i = 1; i <= pages; i++) { %>
+              <li class="page-item <%= page == i ? 'active' : '' %>">
+                <a class="page-link" href="/projects<%= link.replace(`page=${page}`, `page=${i}`) %>"><%= i %></a>
+              </li>
+            <% }; %>
+            <li class="page-item <%= page >= pages ? 'disabled' : '' %>">
+              <a class="page-link" href="/projects<%= link.replace(`page=${parseInt(page)}`, `page=${parseInt(page) + 1}`) %>">Next</a>
             </li>
           </ul>
         </nav>
