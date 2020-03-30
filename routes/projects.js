@@ -287,16 +287,64 @@ module.exports = db => {
   // project activity page
   router.get("/activity/:projectid", helpers.isLoggedIn, (req, res, next) => {
     const { projectid } = req.params;
-    let sqlData = `SELECT * FROM projects WHERE projectid = $1`;
+    let sqlActivity = `SELECT activityid, (time AT TIME ZONE 'Asia/Jakarta' AT TIME ZONE 'asia/jakarta')::DATE dateactivity, (time AT TIME ZONE 'Asia/Jakarta' AT time zone 'asia/jakarta')::time timeactivity, title, description, CONCAT(users.firstname, ' ', users.lastname) AS fullname FROM activity
+    INNER JOIN users ON activity.author = users.userid
+    WHERE projectid = $1 ORDER BY activityid DESC`;
+    let sqlProjectName = `SELECT DISTINCT members.projectid, projects.name projectname FROM members INNER JOIN projects USING (projectid) INNER JOIN users USING (userid) WHERE projectid = $1`;
 
-    db.query(sqlData, [projectid], (err, data) => {
+    function convertDateTerm(date) {
+      date = moment(date).format('YYYY-MM-DD')
+      const today = moment().format('YYYY-MM-DD')
+      const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
+      if (date == today) {
+        return "Today";
+      } else if (date == yesterday) {
+        return "Yesterday";
+      }
+      return moment(date).format("MMMM Do, YYYY")
+    };
+
+    db.query(sqlActivity, [projectid], (err, response) => {
       if (err) res.status(500).json(err);
-      res.render("projects/activity", {
-        title: "Activity",
-        user: req.session.user,
-        url: "projects",
-        subUrl: "activity",
-        result: data.rows[0]
+      db.query(sqlProjectName, [projectid], (err, result) => {
+        if (err) res.status(500).json(err);
+        let dataProjects = result.rows;
+        let dataActivity = response.rows;
+        dataActivity = dataActivity.map(data => {
+          data.dateactivity = moment(data.dateactivity).format('YYYY-MM-DD');
+          data.timeactivity = moment(data.timeactivity, 'HH:mm:ss.SSS').format('HH:mm:ss');
+          return data;
+        });
+
+        let dateonly = dataActivity.map(data => data.dateactivity)
+        dateunix = dateonly.filter((date, index, arr) => {
+          return arr.indexOf(date) == index
+        });
+
+        let activitydate = dateunix.map(date => {
+          let dataindate = dataActivity.filter(item => item.dateactivity == date);
+          return {
+            date: convertDateTerm(date),
+            data: dataindate
+          };
+        });
+
+        projectname = dataProjects.map(data => data.projectname);
+
+        let sqlProjects = `SELECT * FROM projects WHERE projectid = $1`;
+        db.query(sqlProjects, [projectid], (err, dataProjects) => {
+          if (err) res.status(500).json(err);
+          res.render("projects/activity", {
+            title: "Activity",
+            user: req.session.user,
+            url: "projects",
+            subUrl: "activity",
+            projectid,
+            moment,
+            activitydate,
+            result: dataProjects.rows[0]
+          });
+        });
       });
     });
   });
@@ -516,7 +564,7 @@ module.exports = db => {
       const total = totalIssues.rows[0].totaldata;
       const pages = Math.ceil(total / limit);
 
-      let sqlIssues = `SELECT i1.*, users.userid, CONCAT(users.firstname, ' ', users.lastname) AS fullname, CONCAT(u2.firstname, ' ', u2.lastname) AS author FROM issues i1
+      let sqlIssues = `SELECT i1.*, users.userid, CONCAT(users.firstname, ' ', users.lastname) AS fullname, CONCAT(u2.firstname, ' ', u2.lastname) AS author, i1.subject AS issuename FROM issues i1
       LEFT JOIN users ON  users.userid = i1.assignee LEFT JOIN users u2 ON i1.author = u2.userid  WHERE projectid = $1`;
 
       if (result.length > 0) {

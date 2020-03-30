@@ -401,7 +401,7 @@
                     <td><%= item.createddate %></td>
                     <td><%= moment(item.updateddate).format('LL') %></td>
                     <td><%= item.closeddate %></td>
-                    <td><%= item.parenttask %></td>
+                    <td><%= item.issuename %></td>
                     <td>
                       <a href="/projects/issues/<%= result.projectid %>/edit/<%= item.issueid %>">
                         <button
