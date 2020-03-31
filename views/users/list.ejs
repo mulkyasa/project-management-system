@@ -119,70 +119,72 @@
     </div>
     <div class="shadow-sm card mt-3">
       <div class="card-body">
+        <form method="POST">
         <h3 class="h3 mb-3">Option</h3>
         <hr />
-        <div class="form-group row">
-          <div class="col-sm-2">Columns</div>
-          <div class="col-sm-2">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="check-id"
-                name="check-id"
-                value="true"
-                checked
-              />
-              <label class="form-check-label" for="check-id">
-                ID
-              </label>
+          <div class="form-group row">
+            <div class="col-sm-2">Columns</div>
+            <div class="col-sm-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="check-id"
+                  name="checkId"
+                  value="true"
+                  <%= option.checkId ? 'checked' : '' %>
+                />
+                <label class="form-check-label" for="check-id">
+                  ID
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="check-name"
+                  name="checkName"
+                  value="true"
+                  <%= option.checkName ? 'checked' : '' %>
+                />
+                <label class="form-check-label" for="check-name">
+                  Name
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="check-position"
+                  name="checkPosition"
+                  value="true"
+                  <%= option.checkPosition ? 'checked' : '' %>
+                />
+                <label class="form-check-label" for="check-position">
+                  Position
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-sm btn-dark" type="submit">
+                Apply
+              </button>
             </div>
           </div>
-          <div class="col-sm-2">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="check-name"
-                name="check-name"
-                value="true"
-                checked
-              />
-              <label class="form-check-label" for="check-name">
-                Name
-              </label>
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="check-position"
-                name="check-position"
-                value="true"
-                checked
-              />
-              <label class="form-check-label" for="check-position">
-                Position
-              </label>
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-dark" type="submit">
-              Apply
-            </button>
-          </div>
-        </div>
+        </form>
         <div class="row mt-4">
           <div class="col-sm">
             <table class="table">
               <thead class="thead-light">
                 <tr>
-                  <th scope="col-sm">ID</th>
+                  <%- option.checkId ? `<th scope="col-sm">ID</th>` : '' %>
                   <th scope="col-sm">Email</th>
-                  <th scope="col-sm">Name</th>
-                  <th scope="col-sm">Position</th>
+                  <%- option.checkName ? `<th scope="col-sm">Name</th>` : '' %>
+                  <%- option.checkPosition ? `<th scope="col-sm">Position</th>` : '' %>
                   <th scope="col-sm">Type Job</th>
                   <th scope="col-sm">Action</th>
                 </tr>
@@ -190,10 +192,10 @@
               <tbody>
                 <% data.forEach((item) => { %>
                 <tr>
-                  <th scope="row"><%= item.userid %></th>
+                  <th scope="row" <%= option.checkId ? '' : 'hidden' %>><%= item.userid %></th>
                   <td><%= item.email %></td>
-                  <td><%= item.name %></td>
-                  <td><%= item.position %></td>
+                  <td <%= option.checkName ? '' : 'hidden' %>><%= item.name %></td>
+                  <td <%= option.checkPosition ? '' : 'hidden' %>><%= item.position %></td>
                   <td>
                     <%= item.typejob == true ? 'Full Time' : 'Part Time' %>
                   </td>

@@ -23,7 +23,6 @@ module.exports = db => {
       checkMember,
       inputMember
     } = req.query;
-    console.log(req.query);
     let result = [];
 
     if (checkId && inputId) {
@@ -57,24 +56,41 @@ module.exports = db => {
 
       db.query(sqlProjects, (err, projectData) => {
         if (err) res.status(500).json(err);
-
+        
         let sqlUsers = `SELECT userid, CONCAT(firstname, ' ', lastname) as fullname FROM users`;
         db.query(sqlUsers, (err, usersData) => {
           if (err) res.status(500).json(err);
 
-          res.render("projects/list", {
-            title: "Projects",
-            url: "projects",
-            query: req.query,
-            user: req.session.user,
-            data: projectData.rows,
-            usersData: usersData.rows,
-            pages,
-            page,
-            link
+          let sqlOption = `SELECT optionprojects FROM users WHERE userid = ${req.session.user.userid}`;
+          db.query(sqlOption, (err, optionData) => {
+            if (err) res.status(500).json(err);
+
+            res.render("projects/list", {
+              title: "Projects",
+              url: "projects",
+              query: req.query,
+              user: req.session.user,
+              data: projectData.rows,
+              usersData: usersData.rows,
+              pages,
+              page,
+              link,
+              option: optionData.rows[0].optionprojects
+            });
           });
         });
       });
+    });
+  });
+
+  router.post("/option", helpers.isLoggedIn, (req, res) => {
+    let sqlEditOption = `UPDATE users SET optionprojects = '${JSON.stringify(
+      req.body
+    )}' WHERE userid = ${req.session.user.userid}`;
+
+    db.query(sqlEditOption, err => {
+      if (err) res.status(500).json(err);
+      res.redirect("/projects");
     });
   });
 
@@ -196,7 +212,7 @@ module.exports = db => {
   });
 
   // to delete project data
-  router.get("/delete/:id", (req, res, next) => {
+  router.get("/delete/:id", helpers.isAdmin, (req, res, next) => {
     let deleteProject = "DELETE FROM members WHERE projectid = $1";
     const id = [req.params.id];
 
@@ -328,9 +344,9 @@ module.exports = db => {
             data: dataindate
           };
         });
-
+        
         projectname = dataProjects.map(data => data.projectname);
-
+        console.log(activitydate)
         let sqlProjects = `SELECT * FROM projects WHERE projectid = $1`;
         db.query(sqlProjects, [projectid], (err, dataProjects) => {
           if (err) res.status(500).json(err);
@@ -408,21 +424,39 @@ module.exports = db => {
 
         db.query(sqlData, [projectid], (err, data) => {
           if (err) res.status(500).json(err);
+          let sqlOption = `SELECT optionmembers FROM users WHERE userid = ${req.session.user.userid}`;
 
-          res.render("projects/members/list", {
-            title: "Members",
-            user: req.session.user,
-            data: membersData.rows,
-            result: data.rows[0],
-            projectid,
-            url: "projects",
-            subUrl: "members",
-            page,
-            totalPage: pages,
-            link
+          db.query(sqlOption, (err, optionData) => {
+            if (err) res.status(500).json(err);
+
+            res.render("projects/members/list", {
+              title: "Members",
+              user: req.session.user,
+              data: membersData.rows,
+              result: data.rows[0],
+              projectid,
+              url: "projects",
+              subUrl: "members",
+              page,
+              totalPage: pages,
+              link,
+              option: optionData.rows[0].optionmembers
+            });
           });
         });
       });
+    });
+  });
+
+  router.post("/members/:projectid", helpers.isLoggedIn, (req, res) => {
+    const {projectid} = req.params;
+    let sqlEditOption = `UPDATE users SET optionmembers = '${JSON.stringify(
+      req.body
+    )}' WHERE userid = ${req.session.user.userid}`;
+
+    db.query(sqlEditOption, err => {
+      if (err) res.status(500).json(err);
+      res.redirect(`/projects/members/${projectid}`);
     });
   });
 
@@ -515,7 +549,7 @@ module.exports = db => {
 
   router.get(
     "/members/:projectid/delete/:memberid",
-    helpers.isLoggedIn,
+    helpers.isAdmin,
     (req, res, next) => {
       const { projectid, memberid } = req.params;
 
@@ -583,21 +617,40 @@ module.exports = db => {
 
         db.query(sqlData, [projectid], (err, data) => {
           if (err) res.status(500).json(err);
-          res.render("projects/issues/list", {
-            title: "Issues",
-            user: req.session.user,
-            url: "projects",
-            subUrl: "issues",
-            result: data.rows[0],
-            issuesResult,
-            moment,
-            projectid,
-            page,
-            pages,
-            link
+          let sqlOption = `SELECT optionissues FROM users WHERE userid = ${req.session.user.userid}`;
+
+          db.query(sqlOption, (err, optionData) => {
+            if (err) res.status(500).json(err);
+
+            res.render("projects/issues/list", {
+              title: "Issues",
+              user: req.session.user,
+              url: "projects",
+              subUrl: "issues",
+              result: data.rows[0],
+              issuesResult,
+              moment,
+              projectid,
+              page,
+              pages,
+              link,
+              option: optionData.rows[0].optionissues
+            });
           });
         });
       });
+    });
+  });
+
+  router.post("/issues/:projectid", helpers.isLoggedIn, (req, res) => {
+    const {projectid} = req.params;
+    let sqlEditOption = `UPDATE users SET optionissues = '${JSON.stringify(
+      req.body
+    )}' WHERE userid = ${req.session.user.userid}`;
+
+    db.query(sqlEditOption, err => {
+      if (err) res.status(500).json(err);
+      res.redirect(`/projects/issues/${projectid}`);
     });
   });
 
@@ -814,7 +867,7 @@ module.exports = db => {
     };
   });
 
-  router.get("/issues/:projectid/delete/:issueid", helpers.isLoggedIn, (req, res, next) => {
+  router.get("/issues/:projectid/delete/:issueid", helpers.isAdmin, (req, res, next) => {
     const {projectid, issueid} = req.params;
     let sqlIssues = `DELETE FROM issues WHERE issueid = $1`;
     

@@ -90,78 +90,80 @@
     </div>
     <div class="shadow-sm card mt-3">
       <div class="card-body">
-        <h3 class="h3 mb-3">Option</h3>
-        <hr />
-        <div class="form-group row">
-          <div class="col-sm-2">Columns</div>
-          <div class="col-sm-2">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="check-id"
-                name="check-id"
-                value="true"
-                checked
-              />
-              <label class="form-check-label" for="check-id">
-                ID
-              </label>
+        <form action="/projects/members/<%= result.projectid %>" method="POST">
+          <h3 class="h3 mb-3">Option</h3>
+          <hr />
+          <div class="form-group row">
+            <div class="col-sm-2">Columns</div>
+            <div class="col-sm-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="check-id"
+                  name="checkId"
+                  value="true"
+                  <%= option.checkId ? 'checked' : '' %>
+                />
+                <label class="form-check-label" for="check-id">
+                  ID
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="check-name"
+                  name="checkName"
+                  value="true"
+                  <%= option.checkName ? 'checked' : '' %>
+                />
+                <label class="form-check-label" for="check-name">
+                  Name
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="check-position"
+                  name="checkPosition"
+                  value="true"
+                  <%= option.checkPosition ? 'checked' : '' %>
+                />
+                <label class="form-check-label" for="check-position">
+                  Position
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-sm btn-dark" type="submit">
+                Apply
+              </button>
             </div>
           </div>
-          <div class="col-sm-2">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="check-name"
-                name="check-name"
-                value="true"
-                checked
-              />
-              <label class="form-check-label" for="check-name">
-                Name
-              </label>
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="check-position"
-                name="check-position"
-                value="true"
-                checked
-              />
-              <label class="form-check-label" for="check-position">
-                Position
-              </label>
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-dark" type="submit">
-              Apply
-            </button>
-          </div>
-        </div>
+        </form>
         <div class="row mt-4">
           <div class="col-sm">
             <table class="table">
               <thead class="thead-light">
                 <tr>
-                  <th scope="col-sm">ID</th>
-                  <th scope="col-sm">Name</th>
-                  <th scope="col-sm">Position</th>
+                  <th scope="col-sm" <%= option.checkId ? '' : 'hidden' %>>ID</th>
+                  <th scope="col-sm" <%= option.checkName ? '' : 'hidden' %>>Name</th>
+                  <th scope="col-sm" <%= option.checkPosition ? '' : 'hidden' %>>Position</th>
                   <th scope="col-sm">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <% data.forEach((item) => { %>
                 <tr>
-                  <th scope="row"><%= item.id %></th>
-                  <td><%= item.fullname %></td>
-                  <td><%= item.role %></td>
+                  <th scope="row" <%= option.checkId ? '' : 'hidden' %>><%= item.id %></th>
+                  <td <%= option.checkName ? '' : 'hidden' %>><%= item.fullname %></td>
+                  <td <%= option.checkPosition ? '' : 'hidden' %>><%= item.role %></td>
                   <td>
                     <a
                       href="/projects/members/<%= item.projectid %>/edit/<%= item.id %>"
@@ -174,18 +176,20 @@
                         Edit
                       </button>
                     </a>
-                    <a
-                      href="/projects/members/<%= item.projectid %>/delete/<%= item.id %>"
-                    >
-                      <button
-                        onclick="return confirm('Are you sure you want to delete this item?');"
-                        type="button"
-                        class="btn btn-sm btn-danger"
-                        type="submit"
+                    <% if (user.isadmin) { %>
+                      <a
+                        href="/projects/members/<%= item.projectid %>/delete/<%= item.id %>"
                       >
-                        Delete
-                      </button>
-                    </a>
+                        <button
+                          onclick="return confirm('Are you sure you want to delete this item?');"
+                          type="button"
+                          class="btn btn-sm btn-danger"
+                          type="submit"
+                        >
+                          Delete
+                        </button>
+                      </a>
+                    <% }; %>
                   </td>
                 </tr>
                 <% }); %>

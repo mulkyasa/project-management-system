@@ -29,10 +29,17 @@
                     <strong><%= item.date %></strong>
                   </div>
                   <% item.data.forEach((list) => { %>
-                    <div class="card-body">
-                      <h5><%= list.fullname %></h5>
-                      <h6 class="text-secondary"><%= list.description %></h6>
-                      <span class="badge badge-pill badge-info"><%= list.timeactivity %></span>
+                    <div class="card-body row justify-content-between">
+                      <div class="col-6">
+                        <h5><%= list.fullname %></h5>
+                        <p class="text-secondary mb-2"><%= list.description %></p>
+                        <span class="badge badge-pill badge-info"><%= list.timeactivity %></span>
+                      </div>
+                      <!-- <div class="col-6">
+                        <span class="badge badge-pill badge-danger float-right">Bug</span>
+                        <br>
+                        <span class="badge badge-pill badge-success float-right">80%</span>
+                      </div> -->
                     </div>
                   <% }); %>
                 </div>
