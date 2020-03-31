@@ -398,7 +398,7 @@
                     <td <%= option.checkDone ? '' : 'hidden' %>><%= item.done %>%</td>
                     <td <%= option.checkAuthor ? '' : 'hidden' %>><%= item.author %></td>
                     <td <%= option.checkSpentTime ? '' : 'hidden' %>><%= item.spenttime %></td>
-                    <td <%= option.checkFile ? '' : 'hidden' %>><%= item.file %></td>
+                    <td <%= option.checkFile ? '' : 'hidden' %>> <a href="<%= item.files %>" <%= item.files == 'null' ? 'disabled' : '' %>><%= item.files %></a></td>
                     <td <%= option.checkTargetVersion ? '' : 'hidden' %>><%= item.targetversion %></td>
                     <td <%= option.checkCreatedDate ? '' : 'hidden' %>><%= item.createddate %></td>
                     <td <%= option.checkUpdatedDate ? '' : 'hidden' %>><%= moment(item.updateddate).format('LL') %></td>

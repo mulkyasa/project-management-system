@@ -13,7 +13,8 @@ module.exports = db => {
       res.render("profile/list", {
         title: "Profile",
         data: data.rows[0],
-        url: 'profile'
+        url: 'profile',
+        user
       });
     });
   });

@@ -561,7 +561,7 @@ module.exports = db => {
     }
   );
 
-  router.get("/issues/:projectid", helpers.isLoggedIn, (req, res, next) => {
+  router.get("/issues/:projectid", helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const { projectid } = req.params;
     let sqlIssues = `SELECT COUNT(total) AS totaldata FROM (SELECT i1.*, users.userid, CONCAT(users.firstname, ' ', users.lastname) AS fullname, CONCAT(u2.firstname, ' ', u2.lastname) AS author FROM issues i1 
     INNER JOIN users ON  users.userid = i1.assignee INNER JOIN users u2 ON i1.author = u2.userid  WHERE projectid = 21`;
@@ -722,16 +722,10 @@ module.exports = db => {
           authorid
         ];
         if (req.files) {
-          let file = req.files.images;
-          let fileName = file.name
-            .toLowerCase()
-            .replace("", Date.now())
-            .split(" ")
-            .join("-");
+          let file = req.files.file;
+          let fileName = file.name.toLowerCase().replace("", Date.now()).split(" ").join("-");
 
-          file.mv(
-            path.join(__dirname, "..", "public", "upload", fileName),
-            err => {
+          file.mv(path.join(__dirname, "..", "public", "upload", fileName), err => {
               if (err) res.status(500).json(err);
 
               issueData[11] = `/upload/${fileName}`;
@@ -749,6 +743,7 @@ module.exports = db => {
             res.redirect(`/projects/issues/${projectid}`);
           });
         }
+        console.log(req.files);
       });
     }
   );
