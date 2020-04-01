@@ -8,4 +8,4 @@
   <li>Bootstrap</li>
   <li>EJS</li>
 </ul>
-<p>See more the features at https://mulkyasa-pms.herokuapp.com</p>
+<p>See more the features at https://pms-mulkyasa.herokuapp.com</p>
