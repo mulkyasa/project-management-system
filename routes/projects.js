@@ -103,6 +103,7 @@ module.exports = db => {
       let result = data.rows.map(item => item);
 
       res.render("projects/add", {
+        user: req.session.user,
         title: "Add Project",
         url: "projects",
         projectsMessage: req.flash("projectsMessage"),
@@ -162,6 +163,7 @@ module.exports = db => {
         if (err) res.status(500).json(err);
 
         res.render("projects/edit", {
+          user: req.session.user,
           title: "Edit Project",
           url: "projects",
           projects: dataProjects.rows,
@@ -212,19 +214,16 @@ module.exports = db => {
   });
 
   // to delete project data
-  router.get("/delete/:id", helpers.isAdmin, (req, res, next) => {
-    let deleteProject = "DELETE FROM members WHERE projectid = $1";
+  router.get("/delete/:id", helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const id = [req.params.id];
-
-    db.query(deleteProject, id, err => {
+    let deleteProject = `DELETE FROM members WHERE projectid = ${id};
+    DELETE FROM projects WHERE projectid = ${id};
+    DELETE FROM issues WHERE projectid = ${id};`;
+    
+    db.query(deleteProject, err => {
       if (err) res.status(500).json(err);
 
-      deleteProject = "DELETE FROM projects WHERE projectid = $1";
-      db.query(deleteProject, id, err => {
-        if (err) res.status(500).json(err);
-
-        res.redirect("/projects");
-      });
+      res.redirect("/projects");
     });
   });
 
@@ -549,6 +548,7 @@ module.exports = db => {
 
   router.get(
     "/members/:projectid/delete/:memberid",
+    helpers.isLoggedIn,
     helpers.isAdmin,
     (req, res, next) => {
       const { projectid, memberid } = req.params;
@@ -556,6 +556,7 @@ module.exports = db => {
       let sqlDelete = `DELETE FROM members WHERE projectid = $1 AND id = $2`;
       db.query(sqlDelete, [projectid, memberid], err => {
         if (err) res.status(500).json(err);
+
         res.redirect(`/projects/members/${projectid}`);
       });
     }
@@ -862,12 +863,13 @@ module.exports = db => {
     };
   });
 
-  router.get("/issues/:projectid/delete/:issueid", helpers.isAdmin, (req, res, next) => {
+  router.get("/issues/:projectid/delete/:issueid", helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const {projectid, issueid} = req.params;
     let sqlIssues = `DELETE FROM issues WHERE issueid = $1`;
     
     db.query(sqlIssues, [issueid], (err) => {
       if (err) res.status(500).json(err);
+
       res.redirect(`/projects/issues/${projectid}`);
     });
   });
