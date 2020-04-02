@@ -834,19 +834,21 @@ module.exports = db => {
       issueid
     ];
     if (req.files) {
-      let file = req.files.images;
-      let fileName = file.name.toLowerCase().replace('', Date.now().split(' ').join('-'));
-      file.mv(path.join(__dirname, '..', 'public', 'upload', fileName), (err) => {
-        if (err) res.status(500).json(err);
-        issueData[9] = `/upload/${fileName}`;
-        db.query(sqlIssues, issueData, (err) => {
+      let file = req.files.file;
+      let fileName = file.name.toLowerCase().replace("", Date.now()).split(" ").join("-");
+
+      file.mv(path.join(__dirname, "..", "public", "upload", fileName), err => {
           if (err) res.status(500).json(err);
-          const recordActivity = `INSERT INTO activity (projectid, time, title, description, author)
-          VALUES ($1, NOW(), $2, $3, $4, $5)`;
-          const activityData = [projectid, subject, description, userid];
-          db.query(recordActivity, activityData, (err) => {
+
+          issueData[9] = `/upload/${fileName}`;
+          db.query(sqlIssues, issueData, (err) => {
             if (err) res.status(500).json(err);
-            res.redirect(`/projects/issues/${projectid}`);
+            const recordActivity = `INSERT INTO activity (projectid, time, title, description, author)
+            VALUES ($1, NOW(), $2, $3, $4, $5)`;
+            const activityData = [projectid, subject, description, userid];
+            db.query(recordActivity, activityData, (err) => {
+              if (err) res.status(500).json(err);
+              res.redirect(`/projects/issues/${projectid}`);
           });
         });
       });
