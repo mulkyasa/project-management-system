@@ -8,11 +8,19 @@ var flash = require('connect-flash');
 const fileUpload = require('express-fileupload');
 
 const { Pool } = require('pg')
+// const pool = new Pool({
+//   user: 'zqukcrnnftqbiv',
+//   host: 'ec2-3-211-48-92.compute-1.amazonaws.com',
+//   database: 'd6tqrje5unalje',
+//   password: 'cc8415ac7ae2996af5314c21edcf08b2dd609e40298cfc145c4b3e3af4a29d00',
+//   port: 5432
+// });
+
 const pool = new Pool({
-  user: 'zqukcrnnftqbiv',
-  host: 'ec2-3-211-48-92.compute-1.amazonaws.com',
-  database: 'd6tqrje5unalje',
-  password: 'cc8415ac7ae2996af5314c21edcf08b2dd609e40298cfc145c4b3e3af4a29d00',
+  user: 'postgres',
+  host: 'localhost',
+  database: 'pmsdb',
+  password: '010203',
   port: 5432
 });
 

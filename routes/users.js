@@ -92,8 +92,9 @@ module.exports = db => {
     });
   });
 
-  router.get("/add", helpers.isLoggedIn, (req, res) => {
+  router.get("/add", helpers.isLoggedIn, helpers.isAdmin, (req, res) => {
     res.render("users/add", {
+      user: req.session.user,
       title: "Add User",
       url: "users"
     });
@@ -144,6 +145,7 @@ module.exports = db => {
     db.query(`SELECT * FROM users WHERE userid = $1`, [userid], (err, data) => {
       if (err) res.status(500).json(err);
       res.render("users/edit", {
+        user: req.session.user,
         title: "Edit Users",
         query: req.query,
         data: data.rows[0],
