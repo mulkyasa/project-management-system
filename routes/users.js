@@ -116,6 +116,7 @@ module.exports = db => {
       let optProjects = `{"checkId":"true","checkName":"true","checkMember":"true"}`;
       let optMembers = `{"checkId":"true","checkName":"true","checkPosition":"true"}`;
       let optIssues = `{"checkId":"true","checkTracker":"true","checkSubject":"true","checkDescription":"true","checkStatus":"true","checkPriority":"true","checkAssignee":"true","checkStartDate":"true","checkDueDate":"true","checkEstimatedTime":"true","checkDone":"true","checkAuthor":"true"}`;
+      let isAdmin = false;
       let sql = `INSERT INTO users (email, password, firstname, lastname, Position, typejob, option, optionprojects, optionmembers, optionissues, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9 ,$10, $11)`;
 
       db.query(
@@ -130,7 +131,8 @@ module.exports = db => {
           option,
           optProjects,
           optMembers,
-          optIssues
+          optIssues,
+          isAdmin
         ],
         err => {
           if (err) res.status(500).json(err);
