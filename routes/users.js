@@ -4,9 +4,9 @@ const helpers = require("../helpers/util");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-module.exports = db => {
+module.exports = (db) => {
   /* GET users listing. */
-  router.get("/", helpers.isLoggedIn,  helpers.isAdmin, (req, res) => {
+  router.get("/", helpers.isLoggedIn, helpers.isAdmin, (req, res) => {
     const link = req.url == "/" ? "/?page=1" : req.url;
     const page = req.query.page || 1;
     const limit = 3;
@@ -24,7 +24,7 @@ module.exports = db => {
       checkPosition,
       inputPosition,
       checkTypeJob,
-      inputTypeJob
+      inputTypeJob,
     } = req.query;
 
     if (checkId && inputId) {
@@ -74,19 +74,19 @@ module.exports = db => {
             link,
             url: "users",
             query: req.query,
-            option: optionData.rows[0].option
+            option: optionData.rows[0].option,
           });
         });
       });
     });
   });
 
-  router.post("/", helpers.isLoggedIn,  helpers.isAdmin, (req, res, next) => {
+  router.post("/", helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     let sqlEditOption = `UPDATE users SET option = '${JSON.stringify(
       req.body
     )}' WHERE userid = ${req.session.user.userid}`;
 
-    db.query(sqlEditOption, err => {
+    db.query(sqlEditOption, (err) => {
       if (err) res.status(500).json(err);
       res.redirect("/users");
     });
@@ -96,45 +96,33 @@ module.exports = db => {
     res.render("users/add", {
       user: req.session.user,
       title: "Add User",
-      url: "users"
+      url: "users",
     });
   });
 
-  router.post("/add", helpers.isLoggedIn,  helpers.isAdmin, (req, res) => {
+  router.post("/add", helpers.isLoggedIn, helpers.isAdmin, (req, res) => {
     const {
       email,
       password,
       firstname,
       lastname,
       position,
-      typejob
+      typejob,
     } = req.body;
     const isTypeJob = typejob == "Full Time" ? true : false;
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) res.status(500).json(err);
-      let option = '{"checkId":"true","checkName":"true","checkPosition":"true"}';
-      let optProjects = `{"checkId":"true","checkName":"true","checkMember":"true"}`;
-      let optMembers = `{"checkId":"true","checkName":"true","checkPosition":"true"}`;
-      let optIssues = `{"checkId":"true","checkTracker":"true","checkSubject":"true","checkDescription":"true","checkStatus":"true","checkPriority":"true","checkAssignee":"true","checkStartDate":"true","checkDueDate":"true","checkEstimatedTime":"true","checkDone":"true","checkAuthor":"true"}`;
+      let option =
+        '{"checkId":"true","checkName":"true","checkPosition":"true"}';
+      let optProjects = '{"checkId":"true","checkName":"true","checkMember":"true"}';
+      let optMembers = '{"checkId":"true","checkName":"true","checkPosition":"true"}';
+      let optIssues = '{"checkId":"true","checkTracker":"true","checkSubject":"true","checkDescription":"true","checkStatus":"true","checkPriority":"true","checkAssignee":"true","checkStartDate":"true","checkDueDate":"true","checkEstimatedTime":"true","checkDone":"true","checkAuthor":"true","checkSpentTime":"true","checkFile":"true","checkTargetVersion":"true","checkCreatedDate":"true","checkUpdatedDate":"true","checkClosedDate":"true","checkParentTask":"true"}';
       let isAdmin = false;
-      let sql = `INSERT INTO users (email, password, firstname, lastname, Position, typejob, option, optionprojects, optionmembers, optionissues, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9 ,$10, $11)`;
-
+      let sql = `INSERT INTO users (email, password, firstname, lastname, position, typejob, option, optionprojects, optionmembers, optionissues, isadmin) VALUES (${email}, ${hash}, ${firstname}, ${lastname}, ${position}, ${isTypeJob}, ${option}, ${optProjects}, ${optMembers}, ${optIssues}, ${isAdmin})`;
+      console.log(sql)
       db.query(
         sql,
-        [
-          email,
-          hash,
-          firstname,
-          lastname,
-          position,
-          isTypeJob,
-          option,
-          optProjects,
-          optMembers,
-          optIssues,
-          isAdmin
-        ],
-        err => {
+        (err) => {
           if (err) res.status(500).json(err);
           res.redirect("/users");
         }
@@ -142,65 +130,81 @@ module.exports = db => {
     });
   });
 
-  router.get("/edit/:userid", helpers.isLoggedIn, helpers.isAdmin, (req, res) => {
-    const { userid } = req.params;
-    db.query(`SELECT * FROM users WHERE userid = $1`, [userid], (err, data) => {
-      if (err) res.status(500).json(err);
-      res.render("users/edit", {
-        user: req.session.user,
-        title: "Edit Users",
-        query: req.query,
-        data: data.rows[0],
-        url: "users"
-      });
-    });
-  });
-
-  router.post("/edit/:userid", helpers.isLoggedIn,  helpers.isAdmin, (req, res) => {
-    const {
-      firstname,
-      lastname,
-      email,
-      password,
-      position,
-      typejob
-    } = req.body;
-    const isTypeJob = typejob == "Full Time" ? true : false;
-    const { userid } = req.params;
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) res.status(500).json(err);
-      if (!password) {
-        sql = `UPDATE users SET firstname = $2, lastname = $3, email = $4, position = $5, typejob = $6 WHERE userid = $1`;
-      } else {
-        sql = `UPDATE users SET firstname = $2, lastname = $3, email = $4, password = $7, position = $5, typejob = $6 WHERE userid=$1`;
-      }
+  router.get(
+    "/edit/:userid",
+    helpers.isLoggedIn,
+    helpers.isAdmin,
+    (req, res) => {
+      const { userid } = req.params;
       db.query(
-        sql,
-        [userid, firstname, lastname, email, position, isTypeJob, hash],
-        (err, data) => {
-          if (err) res.status(500).json(err);
-          res.redirect("/users");
-        }
-      );
-    });
-  });
-
-  router.get("/delete/:userid", helpers.isLoggedIn, helpers.isAdmin, (req, res) => {
-    const { userid } = req.params;
-    let result = "Are you sure you want to delete?";
-
-    if (result) {
-      db.query(
-        `DELETE FROM users, me WHERE userid = $1`,
+        `SELECT * FROM users WHERE userid = $1`,
         [userid],
         (err, data) => {
           if (err) res.status(500).json(err);
-          res.redirect("/users");
+          res.render("users/edit", {
+            user: req.session.user,
+            title: "Edit Users",
+            query: req.query,
+            data: data.rows[0],
+            url: "users",
+          });
         }
       );
     }
-    res.redirect("/users");
-  });
+  );
+
+  router.post(
+    "/edit/:userid",
+    helpers.isLoggedIn,
+    helpers.isAdmin,
+    (req, res) => {
+      const {
+        firstname,
+        lastname,
+        email,
+        password,
+        position,
+        typejob,
+      } = req.body;
+      const isTypeJob = typejob == "Full Time" ? true : false;
+      const { userid } = req.params;
+      bcrypt.hash(password, saltRounds, (err, hash) => {
+        if (err) res.status(500).json(err);
+        if (!password) {
+          sql = `UPDATE users SET firstname = $2, lastname = $3, email = $4, position = $5, typejob = $6 WHERE userid = $1`;
+        } else {
+          sql = `UPDATE users SET firstname = $2, lastname = $3, email = $4, password = $7, position = $5, typejob = $6 WHERE userid=$1`;
+        }
+        db.query(
+          sql,
+          [userid, firstname, lastname, email, position, isTypeJob, hash],
+          (err, data) => {
+            if (err) res.status(500).json(err);
+            res.redirect("/users");
+          }
+        );
+      });
+    }
+  );
+
+  router.get(
+    "/delete/:userid",
+    helpers.isLoggedIn,
+    helpers.isAdmin,
+    (req, res) => {
+      const { userid } = req.params;
+      let deleteMembers = `DELETE FROM members WHERE userid = ${userid}`;
+      let deleteUsers = `DELETE FROM users WHERE userid = ${userid}`;
+
+      db.query(deleteMembers, (err) => {
+        if (err) res.status(500).json(err);
+        db.query(deleteUsers, (err) => {
+          if (err) res.status(500).json(err);
+          res.redirect("/users");
+        });
+      });
+    }
+  );
 
   return router;
 };
